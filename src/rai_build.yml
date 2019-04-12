@@ -1,6 +1,6 @@
 rai:
   version: 0.2
-  image: raiproject/pumps2018:amd64-cuda100
+  image: balphi/crispr-cuda:1
 resources:
   cpu:
     architecture: amd64
