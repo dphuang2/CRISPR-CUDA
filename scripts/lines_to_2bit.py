@@ -4,7 +4,8 @@ with open("../src/sequences.txt") as fo:
   data = fo.read().split('\n')
 
 with open("sequences.txt.translated", "wb") as fo:
-    for line in data:
+    for i in range(len(data)):
+        line = data[i]
         start, end = 0, 4
         translated = bytearray()
         while bool(line[start:end]):
@@ -12,4 +13,5 @@ with open("sequences.txt.translated", "wb") as fo:
             start += 4
             end += 4
         fo.write(translated)
-        fo.write('\n')
+        if i < len(data) - 1:
+            fo.write('\n')
