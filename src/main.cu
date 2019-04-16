@@ -1,57 +1,101 @@
-
 #include "common/fmt.hpp"
 #include "common/utils.hpp"
+#include <string>
+#include <iostream>
+#include <fstream>
+
+// this file should exist from the docker image
+#define GENOME_FILE_PATH "/data/hg38.twobit"
+#define GUIDES_FILE_PATH "./src/sequences.twobit"
+// akin to string.format in Python
+#define PRINT(...) LOG(info, string(fmt::format(__VA_ARGS__)))
+
+using namespace std;
+
+typedef struct four_bases {
+    /*
+     *Since we can represent four bases (A, C, T, or G) as 2 bit values
+     *(0b00, 0b01, 0b10, 0b11), we can use one byte to represent 4
+     *bases. This struct encapsulates four bases in a single byte
+     *and has some helper functions for comparisons.
+     */
+    unsigned char one: 2;
+    unsigned char two: 2;
+    unsigned char three: 2;
+    unsigned char four: 2;
 
 
-#define PRINT(...) LOG(info, std::string(fmt::format(__VA_ARGS__)))
+    /*
+     *four_bases (char byte) {
+     *    one = (byte >> 6); 
+     *    two = (byte >> 4) & 0x3; 
+     *    three = (byte >> 2) & 0x3; 
+     *    four = byte & 0x3; 
+     *}
+     */
 
-//@@ The purpose of this code is to become familiar with the submission
-//@@ process. Do not worry if you do not understand all the details of
-//@@ the code.
-
-int main(int argc, char ** argv) {
-    int deviceCount;
-
-    cudaGetDeviceCount(&deviceCount);
-
-    timer_start("Getting GPU Data."); //@@ start a timer
-
-    for (int dev = 0; dev < deviceCount; dev++) {
-        cudaDeviceProp deviceProp;
-
-        cudaGetDeviceProperties(&deviceProp, dev);
-
-        if (dev == 0) {
-            if (deviceProp.major == 9999 && deviceProp.minor == 9999) {
-                PRINT("No CUDA GPU has been detected");
-                return -1;
-            } else if (deviceCount == 1) {
-                //@@ WbLog is a provided logging API (similar to Log4J).
-                //@@ The logging function wbLog takes a level which is either
-                //@@ OFF, FATAL, ERROR, WARN, INFO, DEBUG, or trace and a
-                //@@ message to be printed.
-                PRINT("There is 1 device supporting CUDA");
-            } else {
-                PRINT("There are {} devices supporting CUDA", deviceCount);
-            }
-        }
-
-        PRINT("Device {} name {}", dev, deviceProp.name);
-        PRINT("\tComputational Capabilities: {}.{}", deviceProp.major, deviceProp.minor);
-        PRINT("\tMaximum global memory size: {}", deviceProp.totalGlobalMem);
-        PRINT("\tMaximum constant memory size: {}", deviceProp.totalConstMem);
-        PRINT("\tMaximum shared memory size per block: {}", deviceProp.sharedMemPerBlock);
-        PRINT("\tMaximum block dimensions: {}x{}x{}", deviceProp.maxThreadsDim[0],
-                                                    deviceProp.maxThreadsDim[1],
-                                                    deviceProp.maxThreadsDim[2]);
-        PRINT("\tMaximum grid dimensions: {}x{}x{}", deviceProp.maxGridSize[0],
-                                                   deviceProp.maxGridSize[1],
-                                                   deviceProp.maxGridSize[2]);
-        PRINT("\tWarp size: {}", deviceProp.warpSize);
+    int hamming_distance(four_bases other) {
+        return !(one == other.one) +
+            !(two == other.two) +
+            !(three == other.three) +
+            !(four == other.four);
     }
 
-    timer_stop(); //@@ stop the timer
+} four_bases;
 
-    return 0;
+four_bases * read_genome(string filename) {
+    /*
+     *Used for reading our file into a byte buffer. Functions returns a vector<char>
+     *type so we can just the nice properties of our vector library but still
+     *being able to access the data through the vector.data() function
+     */
+
+    /*
+     *ios::binary means to read file as is
+     *ios::ate means start file pointer at the end so we can get file size
+     */
+    ifstream file(filename, ios::binary | ios::ate);
+    if (!file) {
+        PRINT("Could not open file: {}", filename);
+        PRINT("Error code: {}", strerror(errno));
+    }
+    streamsize size = file.tellg();
+    file.seekg(0, ios::beg);
+
+    char * buffer = new char [size];
+    if (file.read(buffer, size))
+        return (four_bases *) buffer;
+    PRINT("Unable to read {}", filename);
+    exit(EXIT_FAILURE);
 }
 
+vector<char *> read_guides(string filename) {
+    vector<vector<four_bases>> guides;
+    ifstream file(filename, ios::binary);
+
+    while(getline(file, line)) {
+
+    }
+
+    return guides;
+} 
+
+int main(int argc, char ** argv) {
+    // Read the data
+    four_bases * genome = read_genome(GENOME_FILE_PATH);
+    vector<vector<four_bases>> guides = read_guides(GUIDES_FILE_PATH);
+
+    four_bases n_ = genome[0];
+    for (int i = 0; i < 20; i++) {
+        four_bases n = genome[i];
+        PRINT("difference with last four nucleotide: {}", n.hamming_distance(n_));
+        PRINT("genome[{}].one: {}", i, n.one);
+        PRINT("genome[{}].two: {}", i, n.two);
+        PRINT("genome[{}].three: {}", i, n.three);
+        PRINT("genome[{}].four: {}", i, n.four);
+        n_ = n;
+    }
+
+    delete[] genome;
+    return EXIT_SUCCESS;
+}

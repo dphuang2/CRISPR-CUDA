@@ -1,6 +1,6 @@
 rai:
   version: 0.2
-  image: balphi/crispr-cuda:1
+  image: balphi/crispr-cuda:2
 resources:
   cpu:
     architecture: amd64
