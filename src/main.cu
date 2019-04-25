@@ -2,17 +2,11 @@
 #include "common/utils.hpp"
 #include <string>
 #include <iostream>
+#include <set>
+#include <assert.h>
 #include <fstream>
 
-#define CUDA_RUNTIME(stmt) checkCuda(stmt, __FILE__, __LINE__);
-void checkCuda(cudaError_t result, const char *file, const int line) {
-    if (result != cudaSuccess) {
-        LOG(critical,
-                std::string(fmt::format("{}@{}: CUDA Runtime Error: {}\n",
-                        file, line, cudaGetErrorString(result))));
-        exit(-1);
-    }
-}
+using namespace std;
 
 /*
  *these files should exist from the docker image and uploaded build folder
@@ -30,11 +24,11 @@ void checkCuda(cudaError_t result, const char *file, const int line) {
  */
 #define GUIDE_SIZE_NUCLEOTIDES 20
 #define NUCLEOTIDES_PER_BYTE 4
-#define GUIDE_SIZE_BYTES (GUIDE_SIZE_NUCLEOTIDES / NUCLEOTIDES_PER_BYTE)
+#define GUIDE_SIZE (GUIDE_SIZE_NUCLEOTIDES / NUCLEOTIDES_PER_BYTE)
 /*
  *Add another byte to account for the null byte that is appended during getline
  */
-#define GUIDE_BUFFER_SIZE GUIDE_SIZE_BYTES + 1
+#define GUIDE_BUFFER_SIZE (GUIDE_SIZE + 1)
 
 /*
  *This is the common edit distance standard for the sgRNA guide
@@ -60,11 +54,17 @@ void checkCuda(cudaError_t result, const char *file, const int line) {
  *Since we don't want to test naive on entire genome cause its takes too long,
  *we will limit our testing region to this constant
  */
-#define GENOME_TEST_LENGTH 5000000
+#define GENOME_TEST_LENGTH (1000000 * 3)
 
-using namespace std;
+#define CUDA_RUNTIME(stmt) checkCuda(stmt, __FILE__, __LINE__);
+void checkCuda(cudaError_t result, const char *file, const int line) {
+    if (result != cudaSuccess) {
+        PRINT("{}@{}: CUDA Runtime Error: {}", file, line, cudaGetErrorString(result));
+        exit(-1);
+    }
+}
 
-typedef vector<tuple<int, unsigned long long> > results_t;
+typedef set<tuple<int, unsigned long long> > results_t;
 
 typedef struct four_nt {
     /*
@@ -152,9 +152,12 @@ four_nt * read_genome(string filename, unsigned long long * genome_length) {
     exit(EXIT_FAILURE);
 }
 
-vector<four_nt *> read_guides(string filename) {
+four_nt * read_guides(string filename, int * num_guides) {
 
-    vector<four_nt *> guides;
+    // Assert that these are equal just in case four_nt struct gets changed
+    assert(sizeof(four_nt) == sizeof(char));
+    
+    char * guides;
     ifstream file(filename, ios::binary);
 
     if (!file) {
@@ -163,17 +166,28 @@ vector<four_nt *> read_guides(string filename) {
         exit(EXIT_FAILURE);
     }
 
-    char * line = new char[GUIDE_BUFFER_SIZE];
-    file.getline(line, GUIDE_BUFFER_SIZE);
-    for(;!file.eof(); file.getline(line, GUIDE_BUFFER_SIZE)) {
-        guides.push_back((four_nt *) line);
-        line = new char[GUIDE_BUFFER_SIZE];
+    // Count number of lines
+    string line;
+    for (*num_guides = 0; getline(file, line); (*num_guides)++);
+    // Move file pointer back to beginning
+    file.clear(); // https://stackoverflow.com/questions/5343173/returning-to-beginning-of-file-after-getline
+    file.seekg(0, file.beg);
+
+    PRINT("Number of guides to process: {}", *num_guides);
+
+    guides = (char *) malloc(*num_guides * GUIDE_BUFFER_SIZE);
+
+    for(int line_number = 0; line_number < *num_guides; line_number++) {
+        file.getline(&guides[line_number * GUIDE_BUFFER_SIZE],
+                GUIDE_BUFFER_SIZE);
     }
-    return guides;
+
+    PRINT("Successfully read all guides");
+    return (four_nt *) guides;
 }
 
 void print_sequence(four_nt * sequence) {
-    for (int i = 0; i < GUIDE_SIZE_BYTES; i++) {
+    for (int i = 0; i < GUIDE_SIZE; i++) {
         four_nt sequence_byte = sequence[i];
         char one = sequence_byte.to_char(0);
         char two = sequence_byte.to_char(1);
@@ -187,7 +201,7 @@ void print_sequence(four_nt * sequence) {
     printf("\n");
 }
 
-results_t naive_cpu_guide_matching(four_nt * genome, unsigned long long genome_length, vector<four_nt *> guides) {
+results_t naive_cpu_guide_matching(four_nt * genome, unsigned long long genome_length, four_nt * guides, int num_guides) {
     /*
      *Pseudocode for the naive algorithm:
      *
@@ -198,39 +212,45 @@ results_t naive_cpu_guide_matching(four_nt * genome, unsigned long long genome_l
      *             if genome[genome_index + base_index] != guide[base_index]:
      *                 mismatches += 1
      *        if mismatches <= 4:
-     *            results.append((guide, genome_index))
+     *            results.insert((guide, genome_index))
      */
     results_t results;
     
-    for (unsigned long long i = 0; i <= GENOME_TEST_LENGTH - GUIDE_SIZE_BYTES;
+    for (unsigned long long i = 0; i <= GENOME_TEST_LENGTH - GUIDE_SIZE;
             i++) {
-        for (int j = 0; j < guides.size(); j++) {
-            four_nt * guide = guides[j];
+        for (int j = 0; j < num_guides; j++) {
+            four_nt * guide = &guides[j * GUIDE_BUFFER_SIZE];
             four_nt * genome_base = &genome[i];
 
             int mismatches = 0;
-            for (int k = 0; k < GUIDE_SIZE_BYTES; k++)
+            for (int k = 0; k < GUIDE_SIZE; k++)
                 mismatches += genome_base[k].hamming_distance(guide[k]);
 
             if (mismatches <= EDIT_DISTANCE_THRESHOLD)
-                results.push_back(make_tuple(j, i));
+                results.insert(make_tuple(j, i));
         }
     }
     return results;
 }
 
-results_t naive_gpu_guide_matching(four_nt * genome, unsigned long long genome_length, vector<four_nt *> guides) {
+results_t naive_gpu_guide_matching(four_nt * genome, unsigned long long genome_length, four_nt * guides, int num_guides) {
     results_t results;
 
     four_nt * deviceGenome;
     four_nt * deviceGuides;
 
     CUDA_RUNTIME(cudaMalloc((void **) &deviceGenome, genome_length * sizeof(four_nt)));
-    CUDA_RUNTIME(cudaMalloc((void **) &deviceGuides, guides.size() *
-                sizeof(four_nt *) * sizeof(four_nt) * GUIDE_SIZE_BYTES));
+    CUDA_RUNTIME(cudaMalloc((void **) &deviceGuides, num_guides *
+                sizeof(four_nt *) * sizeof(four_nt) * GUIDE_SIZE));
 
-    free(deviceGenome);
-    free(deviceGuides);
+    CUDA_RUNTIME(cudaMemcpy(deviceGenome, genome, genome_length *
+                sizeof(four_nt), cudaMemcpyHostToDevice));
+
+    CUDA_RUNTIME(cudaMemcpy(deviceGuides, guides, num_guides *
+                sizeof(four_nt) * GUIDE_SIZE, cudaMemcpyHostToDevice));
+
+    CUDA_RUNTIME(cudaFree(deviceGenome));
+    CUDA_RUNTIME(cudaFree(deviceGuides));
 
     return results;
 }
@@ -239,33 +259,33 @@ int main(int argc, char ** argv) {
     /*
      *Read the genome and guides into memory
      */
+    int num_guides;
     unsigned long long genome_length;
-    results_t results, results_truth;
     four_nt * genome = read_genome(GENOME_FILE_PATH, &genome_length);
-    vector<four_nt *> guides = read_guides(GUIDES_FILE_PATH);
+    four_nt * guides = read_guides(GUIDES_FILE_PATH, &num_guides);
 
-    for (int i = 0; i < guides.size(); i++) {
-        four_nt * guide = guides[i];
+    for (int i = 0; i < num_guides; i++) {
+        four_nt * guide = &guides[i * GUIDE_BUFFER_SIZE];
         PRINT("--------guides[{}]--------", i);
         print_sequence(guide);
     }
 
     PRINT("Genome length: {} bytes", genome_length);
 
+    results_t results, results_truth;
+
     timer_start("Naive CPU");
-    results_truth = naive_cpu_guide_matching(genome, genome_length, guides);
+    results_truth = naive_cpu_guide_matching(genome, genome_length, guides, num_guides);
     timer_stop();
 
     timer_start("Naive GPU");
-    results = naive_gpu_guide_matching(genome, genome_length, guides);
+    results = naive_gpu_guide_matching(genome, genome_length, guides, num_guides);
     timer_stop();
 
     /*
      *Free up any dynamic memory
      */
     delete[] genome;
-    for (int i = 0; i < guides.size(); i++)
-        delete guides[i];
-    guides.clear();
+    free(guides);
     return EXIT_SUCCESS;
 }
