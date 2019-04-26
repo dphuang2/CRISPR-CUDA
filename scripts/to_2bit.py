@@ -1,4 +1,7 @@
-# http://genome.ucsc.edu/FAQ/FAQformat.html#format7
+"""
+This file is for mapping a file of one line (no new lines) of nucleotides to
+twobit format (convert A, C, T, G to two bits)
+"""
 
 def four_bases_to_byte(*args):
     N = len(args)
