@@ -186,8 +186,8 @@ __global__ void naive_gpu_guide_matching_kernel(
 
     for (uint64_t i = tid; i < genome_length - GUIDE_SIZE; i += gridDim.x * blockDim.x) {
         for (int j = 0; j < num_guides; j++) {
-            guide = &guides[j * GUIDE_BUFFER_SIZE];
-            genome_base = &genome[i];
+            guide = guides + (j * GUIDE_BUFFER_SIZE);
+            genome_base = genome + i;
 
             int mismatches = 0;
             for (int k = 0; k < GUIDE_SIZE; k++) {
@@ -350,20 +350,26 @@ void print_sequence(four_nt * sequence) {
     printf("\n");
 }
 
-bool assert_results_equal(results_t cpuResults, uint64_t * gpuResults, int gpuNumResults) {
+void assert_results_equal(results_t cpuResults, uint64_t * gpuResults, int gpuNumResults) {
     /*
      *For comparing the gpu results and the cpuResults
      */
-    if (gpuNumResults != cpuResults.size())
-        return false;
+    string failMessage = "Results were not equal, sad D:";
+    string successMessage = "Results were equal, yay!";
+    if (gpuNumResults != cpuResults.size()) {
+        PRINT("{}", failMessage);
+        return;
+    }
     for (int i = 0; i < gpuNumResults; i++) {
         int gpuResultsIdx = i * 2;
         int guideIdx = (int) gpuResults[gpuResultsIdx];
         uint64_t genomeIdx = gpuResults[gpuResultsIdx + 1];
-        if (!cpuResults.count(make_tuple(guideIdx, genomeIdx)))
-            return false;
+        if (!cpuResults.count(make_tuple(guideIdx, genomeIdx))) {
+            PRINT("{}", failMessage);
+            return;
+        }
     }
-    return true;
+    PRINT("{}", successMessage);
 }
 
 int main(int argc, char ** argv) {
@@ -410,13 +416,7 @@ int main(int argc, char ** argv) {
 
     PRINT("Size of GPU results: {}", hostNumResults);
 
-    timer_start("Comparing GPU results with CPU results");
-    bool equal = assert_results_equal(results_truth, hostResults, hostNumResults);
-    timer_stop();
-    if (equal)
-        PRINT("Results were equal, yay!");
-    else
-        PRINT("Results were not equal, boo :(");
+    assert_results_equal(results_truth, hostResults, hostNumResults);
 
     /*
      *Free up any dynamic memory
