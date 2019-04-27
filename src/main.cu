@@ -356,6 +356,7 @@ void assert_results_equal(results_t cpuResults, uint64_t * gpuResults, int gpuNu
      */
     string failMessage = "Results were not equal, sad D:";
     string successMessage = "Results were equal, yay!";
+    results_t seen;
     if (gpuNumResults != cpuResults.size()) {
         PRINT("{}", failMessage);
         return;
@@ -364,9 +365,12 @@ void assert_results_equal(results_t cpuResults, uint64_t * gpuResults, int gpuNu
         int gpuResultsIdx = i * 2;
         int guideIdx = (int) gpuResults[gpuResultsIdx];
         uint64_t genomeIdx = gpuResults[gpuResultsIdx + 1];
-        if (!cpuResults.count(make_tuple(guideIdx, genomeIdx))) {
+        tuple<int, uint64_t> match = make_tuple(guideIdx, genomeIdx);
+        if (!cpuResults.count(match) && !seen.count(match)) {
             PRINT("{}", failMessage);
             return;
+        } else {
+            seen.insert(match);
         }
     }
     PRINT("{}", successMessage);
