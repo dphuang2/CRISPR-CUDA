@@ -154,7 +154,7 @@ results_t naive_cpu_guide_matching(four_nt * genome, uint64_t genome_length, fou
 }
 
 /***************************************************************
-  NAIVE GPU IMPLEMENTATION
+  GPU HELPER FUNCTIONS
 ***************************************************************/
 
 __device__ int two_bit_hamming_distance(char one, char two) {
@@ -168,6 +168,9 @@ __device__ int two_bit_hamming_distance(char one, char two) {
     return !a + !b + !c + !d;
 }
 
+/***************************************************************
+  NAIVE GPU IMPLEMENTATION
+***************************************************************/
 
 __global__ void naive_gpu_guide_matching_kernel(
         char * genome,
@@ -207,14 +210,20 @@ __global__ void naive_gpu_guide_matching_kernel(
     }
 }
 
-void naive_gpu_guide_matching(
+/***************************************************************
+  GPU KERNEL LAUNCHER
+***************************************************************/
+
+enum methods {naive, thread_coarsening};
+void gpu_guide_matching(
         char * genome,
         uint64_t genome_length,
         char * guides,
         int num_guides,
         uint64_t * hostResults,
         int * hostNumResults,
-        uint64_t sizeOfResults)
+        uint64_t sizeOfResults,
+        methods method)
 {
     uint64_t * deviceResults;
     char * deviceGenome;
@@ -229,17 +238,22 @@ void naive_gpu_guide_matching(
     CUDA_CHECK(cudaMemcpy(deviceGenome, genome, genome_length, cudaMemcpyHostToDevice));
     CUDA_CHECK(cudaMemcpy(deviceGuides, guides, num_guides * GUIDE_BUFFER_SIZE, cudaMemcpyHostToDevice));
 
-    dim3 dimGrid(ceil(genome_length / double(TILE_WIDTH)));
-    dim3 dimBlock(TILE_WIDTH);
-    naive_gpu_guide_matching_kernel<<<dimGrid, dimBlock>>>(
-            deviceGenome,
-            genome_length,
-            deviceGuides,
-            num_guides,
-            deviceResults,
-            deviceNumResults,
-            sizeOfResults
-            );
+    switch (method) {
+        case naive: 
+            dim3 dimGrid(ceil(genome_length / double(TILE_WIDTH)));
+            dim3 dimBlock(TILE_WIDTH);
+            naive_gpu_guide_matching_kernel<<<dimGrid, dimBlock>>>(
+                    deviceGenome,
+                    genome_length,
+                    deviceGuides,
+                    num_guides,
+                    deviceResults,
+                    deviceNumResults,
+                    sizeOfResults
+                    );
+            break;
+    }
+
     CUDA_CHECK(cudaPeekAtLastError());
     CUDA_CHECK(cudaDeviceSynchronize());
 
@@ -405,20 +419,18 @@ int main(int argc, char ** argv) {
     results_truth = naive_cpu_guide_matching(genome, GENOME_TEST_LENGTH, guides, num_guides);
     timer_stop();
 
-    PRINT("Size of CPU results: {}", results_truth.size());
-
     timer_start("Naive GPU");
-    naive_gpu_guide_matching(
+    methods method = naive;
+    gpu_guide_matching(
             (char *) genome,
             GENOME_TEST_LENGTH,
             (char *) guides,
             num_guides,
             hostResults,
             &hostNumResults,
-            sizeOfResults);
+            sizeOfResults,
+            method);
     timer_stop();
-
-    PRINT("Size of GPU results: {}", hostNumResults);
 
     assert_results_equal(results_truth, hostResults, hostNumResults);
 
