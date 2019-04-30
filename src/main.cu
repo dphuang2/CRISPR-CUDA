@@ -112,7 +112,6 @@ typedef struct four_nt {
 
 } four_nt;
 
-
 /***************************************************************
   CPU/GPU HELPER FUNCTIONS
 ***************************************************************/
@@ -440,7 +439,6 @@ int main(int argc, char ** argv) {
 
     PRINT("Naive GPU results size: {}", hostNumResults);
     assert_results_equal(results_truth, hostResults, hostNumResults);
-
 
     /*
      *Free up any dynamic memory
