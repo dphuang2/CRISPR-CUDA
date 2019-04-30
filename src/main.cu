@@ -50,12 +50,12 @@ using namespace std;
  *Since we don't want to test naive on entire genome cause its takes too long,
  *we will limit our testing region to this constant
  */
-#define GENOME_TEST_LENGTH (1000000 * 10)
+#define GENOME_TEST_LENGTH_BYTES (1000000 * 1)
 /*
  *This is used for predicting the maximum number of matches we might possibly
  *have
  */
-#define MATCHES_PER_GUIDE 2000
+#define MATCHES_PER_GUIDE 8000
 
 #define TILE_WIDTH 1024
 
@@ -74,19 +74,12 @@ typedef struct four_nt {
      * Since we can represent four nucleotides (nt) (A, C, T, or G) as 2 bit
      * values (0b00, 0b01, 0b10, 0b11), we can use one byte to represent 4 nt.
      * This struct encapsulates four nt in a single byte and has some helper
-     * functions for comparisons.
+     * functions for printing.
      */
     unsigned char one: 2;
     unsigned char two: 2;
     unsigned char three: 2;
     unsigned char four: 2;
-
-    int hamming_distance(four_nt other) {
-        return !(one == other.one) +
-            !(two == other.two) +
-            !(three == other.three) +
-            !(four == other.four);
-    }
 
     char bits_to_char(unsigned char bits) {
         switch(bits) {
@@ -119,6 +112,18 @@ typedef struct four_nt {
 
 } four_nt;
 
+
+/***************************************************************
+  CPU/GPU HELPER FUNCTIONS
+***************************************************************/
+
+__device__ __host__ char get_nucleotide_from_index(char * sequence, uint64_t index) {
+    char byte = sequence[index / NUCLEOTIDES_PER_BYTE];
+    byte >>= 2 * (NUCLEOTIDES_PER_BYTE - (index % NUCLEOTIDES_PER_BYTE) - 1);
+    byte &= 0b11;
+    return byte;
+}
+
 /***************************************************************
   NAIVE CPU IMPLEMENTATION
     
@@ -133,18 +138,27 @@ for genome_index in xrange(len(genome) - 19):
         if mismatches <= 4:
             results.insert((guide, genome_index))
 ***************************************************************/
-results_t naive_cpu_guide_matching(four_nt * genome, uint64_t genome_length, four_nt * guides, int num_guides) {
-    results_t results;
-    
-    for (uint64_t i = 0; i <= genome_length - GUIDE_SIZE;
-            i++) {
-        for (int j = 0; j < num_guides; j++) {
-            four_nt * guide = &guides[j * GUIDE_BUFFER_SIZE];
-            four_nt * genome_base = &genome[i];
 
-            int mismatches = 0;
-            for (int k = 0; k < GUIDE_SIZE; k++)
-                mismatches += genome_base[k].hamming_distance(guide[k]);
+results_t naive_cpu_guide_matching(char * genome, uint64_t genome_length_bytes, char * guides, int num_guides) {
+    results_t results;
+    char genome_nucleotide;
+    char guide_nucleotide;
+    char * guide;
+    int mismatches;
+    uint64_t i;
+    int j, k;
+
+    for (i = 0; i <= (genome_length_bytes * NUCLEOTIDES_PER_BYTE) - GUIDE_SIZE_NUCLEOTIDES + 1;
+            i++) {
+        for (j = 0; j < num_guides; j++) {
+            guide = guides + (j * GUIDE_BUFFER_SIZE);
+
+            mismatches = 0;
+            for (k = 0; k < GUIDE_SIZE_NUCLEOTIDES; k++) {
+                genome_nucleotide = get_nucleotide_from_index(genome, i + k);
+                guide_nucleotide = get_nucleotide_from_index(guide, k);
+                mismatches += genome_nucleotide != guide_nucleotide;
+            }
 
             if (mismatches <= EDIT_DISTANCE_THRESHOLD)
                 results.insert(make_tuple(j, i));
@@ -154,27 +168,12 @@ results_t naive_cpu_guide_matching(four_nt * genome, uint64_t genome_length, fou
 }
 
 /***************************************************************
-  GPU HELPER FUNCTIONS
-***************************************************************/
-
-__device__ int two_bit_hamming_distance(char one, char two) {
-    /*
-     * Take the hamming distance between two bytes for every two bits
-     */
-    bool a = (one >> 6)          == (two >> 6);
-    bool b = ((one >> 4) & 0b11) == ((two >> 4) & 0b11);
-    bool c = ((one >> 2) & 0b11) == ((two >> 2) & 0b11);
-    bool d = (one & 0b11)        == (two & 0b11);
-    return !a + !b + !c + !d;
-}
-
-/***************************************************************
   NAIVE GPU IMPLEMENTATION
 ***************************************************************/
 
 __global__ void naive_gpu_guide_matching_kernel(
         char * genome,
-        uint64_t genome_length,
+        uint64_t genome_length_bytes,
         char * guides,
         int num_guides,
         uint64_t * results,
@@ -185,17 +184,22 @@ __global__ void naive_gpu_guide_matching_kernel(
     int numResultsLocal;
     int resultsIdx;
     char * guide;
-    char * genome_base;
+    uint64_t i;
+    int mismatches;
+    int j, k;
+    char genome_nucleotide;
+    char guide_nucleotide;
 
-    for (uint64_t i = tid; i < genome_length - GUIDE_SIZE; i += gridDim.x * blockDim.x) {
-        for (int j = 0; j < num_guides; j++) {
+    for (i = tid; i <= (genome_length_bytes * NUCLEOTIDES_PER_BYTE) - GUIDE_SIZE_NUCLEOTIDES + 1;
+            i += gridDim.x * blockDim.x) {
+        for (j = 0; j < num_guides; j++) {
             guide = guides + (j * GUIDE_BUFFER_SIZE);
-            genome_base = genome + i;
 
-            int mismatches = 0;
-            for (int k = 0; k < GUIDE_SIZE; k++) {
-                mismatches += two_bit_hamming_distance(genome_base[k],
-                        guide[k]);
+            mismatches = 0;
+            for (k = 0; k < GUIDE_SIZE_NUCLEOTIDES; k++) {
+                genome_nucleotide = get_nucleotide_from_index(genome, i + k);
+                guide_nucleotide = get_nucleotide_from_index(guide, k);
+                mismatches += genome_nucleotide != guide_nucleotide;
             }
 
             if (mismatches <= EDIT_DISTANCE_THRESHOLD) {
@@ -217,7 +221,7 @@ __global__ void naive_gpu_guide_matching_kernel(
 enum methods {naive, thread_coarsening};
 void gpu_guide_matching(
         char * genome,
-        uint64_t genome_length,
+        uint64_t genome_length_bytes,
         char * guides,
         int num_guides,
         uint64_t * hostResults,
@@ -231,20 +235,20 @@ void gpu_guide_matching(
     int * deviceNumResults;
 
     CUDA_CHECK(cudaMalloc((void **) &deviceResults, sizeOfResults));
-    CUDA_CHECK(cudaMalloc((void **) &deviceGenome, genome_length));
+    CUDA_CHECK(cudaMalloc((void **) &deviceGenome, genome_length_bytes));
     CUDA_CHECK(cudaMalloc((void **) &deviceGuides, num_guides * GUIDE_BUFFER_SIZE));
     CUDA_CHECK(cudaMalloc((void **) &deviceNumResults, sizeof(int)));
 
-    CUDA_CHECK(cudaMemcpy(deviceGenome, genome, genome_length, cudaMemcpyHostToDevice));
+    CUDA_CHECK(cudaMemcpy(deviceGenome, genome, genome_length_bytes, cudaMemcpyHostToDevice));
     CUDA_CHECK(cudaMemcpy(deviceGuides, guides, num_guides * GUIDE_BUFFER_SIZE, cudaMemcpyHostToDevice));
 
     switch (method) {
         case naive: 
-            dim3 dimGrid(ceil(genome_length / double(TILE_WIDTH)));
+            dim3 dimGrid(ceil((genome_length_bytes * NUCLEOTIDES_PER_BYTE) / double(TILE_WIDTH)));
             dim3 dimBlock(TILE_WIDTH);
             naive_gpu_guide_matching_kernel<<<dimGrid, dimBlock>>>(
                     deviceGenome,
-                    genome_length,
+                    genome_length_bytes,
                     deviceGuides,
                     num_guides,
                     deviceResults,
@@ -278,9 +282,9 @@ void gpu_guide_matching(
 ***************************************************************/
 
 /***************************************************************
-  HELPER FUNCTIONS
+  I/O HELPER FUNCTIONS
 ***************************************************************/
-four_nt * read_genome(string filename, uint64_t * genome_length) {
+four_nt * read_genome(string filename, uint64_t * genome_length_bytes) {
     /*
      * Used for reading our file into a byte buffer casted as our four_nt struct.
      */
@@ -298,7 +302,7 @@ four_nt * read_genome(string filename, uint64_t * genome_length) {
 
     streamsize size = file.tellg();
     file.seekg(0, ios::beg);
-    *genome_length = size;
+    *genome_length_bytes = size;
 
     /*
      * I would love to use vector<four_nt> here but if we want to use the read
@@ -395,8 +399,8 @@ int main(int argc, char ** argv) {
      *Read the genome and guides into memory
      */
     int num_guides;
-    uint64_t genome_length;
-    four_nt * genome = read_genome(GENOME_FILE_PATH, &genome_length);
+    uint64_t genome_length_bytes;
+    four_nt * genome = read_genome(GENOME_FILE_PATH, &genome_length_bytes);
     four_nt * guides = read_guides(GUIDES_FILE_PATH, &num_guides);
 
     for (int i = 0; i < num_guides; i++) {
@@ -405,25 +409,27 @@ int main(int argc, char ** argv) {
         print_sequence(guide);
     }
 
-    PRINT("Genome length: {} bytes", genome_length);
+    PRINT("Genome length: {} bytes", genome_length_bytes);
 
     /*
      *Instantiate our results variables
      */
     results_t results_truth;
-    uint64_t sizeOfResults = num_guides * 2 * MATCHES_PER_GUIDE * sizeof(uint64_t);
+    uint64_t sizeOfResults = num_guides * MATCHES_PER_GUIDE * sizeof(uint64_t);
     uint64_t * hostResults = (uint64_t *) malloc(sizeOfResults);
     int hostNumResults;
 
     timer_start("Naive CPU");
-    results_truth = naive_cpu_guide_matching(genome, GENOME_TEST_LENGTH, guides, num_guides);
+    results_truth = naive_cpu_guide_matching((char *) genome, GENOME_TEST_LENGTH_BYTES, (char *) guides, num_guides);
     timer_stop();
+
+    PRINT("Ground truth results size: {}", results_truth.size());
 
     timer_start("Naive GPU");
     methods method = naive;
     gpu_guide_matching(
             (char *) genome,
-            GENOME_TEST_LENGTH,
+            GENOME_TEST_LENGTH_BYTES,
             (char *) guides,
             num_guides,
             hostResults,
@@ -432,7 +438,9 @@ int main(int argc, char ** argv) {
             method);
     timer_stop();
 
+    PRINT("Naive GPU results size: {}", hostNumResults);
     assert_results_equal(results_truth, hostResults, hostNumResults);
+
 
     /*
      *Free up any dynamic memory
