@@ -20,9 +20,9 @@ using namespace std;
 /*
  *20 nucleotides (typical guide length) / 4 nucleotides per byte = 5
  */
-#define GUIDE_SIZE_NUCLEOTIDES 20
-#define NUCLEOTIDES_PER_BYTE 4
-#define GUIDE_SIZE (GUIDE_SIZE_NUCLEOTIDES / NUCLEOTIDES_PER_BYTE)
+#define GUIDE_SIZE_NT 20
+#define NT_PER_BYTE 4
+#define GUIDE_SIZE (GUIDE_SIZE_NT / NT_PER_BYTE)
 /*
  *Add another byte to account for the null byte that is appended during
  *ifstream.getline
@@ -118,8 +118,8 @@ typedef struct four_nt {
 ***************************************************************/
 
 __device__ __host__ char get_nucleotide_from_index(char * sequence, uint64_t index) {
-    char byte = sequence[index / NUCLEOTIDES_PER_BYTE];
-    byte >>= 2 * (NUCLEOTIDES_PER_BYTE - (index % NUCLEOTIDES_PER_BYTE) - 1);
+    char byte = sequence[index / NT_PER_BYTE];
+    byte >>= 2 * (NT_PER_BYTE - (index % NT_PER_BYTE) - 1);
     byte &= 0b11;
     return byte;
 }
@@ -148,13 +148,13 @@ results_t naive_cpu_guide_matching(char * genome, uint64_t genome_length_bytes, 
     uint64_t i;
     int j, k;
 
-    for (i = 0; i <= (genome_length_bytes * NUCLEOTIDES_PER_BYTE) - GUIDE_SIZE_NUCLEOTIDES + 1;
+    for (i = 0; i <= (genome_length_bytes * NT_PER_BYTE) - GUIDE_SIZE_NT + 1;
             i++) {
         for (j = 0; j < num_guides; j++) {
             guide = guides + (j * GUIDE_BUFFER_SIZE);
 
             mismatches = 0;
-            for (k = 0; k < GUIDE_SIZE_NUCLEOTIDES; k++) {
+            for (k = 0; k < GUIDE_SIZE_NT; k++) {
                 genome_nucleotide = get_nucleotide_from_index(genome, i + k);
                 guide_nucleotide = get_nucleotide_from_index(guide, k);
                 mismatches += genome_nucleotide != guide_nucleotide;
@@ -190,13 +190,13 @@ __global__ void naive_gpu_guide_matching_kernel(
     char genome_nucleotide;
     char guide_nucleotide;
 
-    for (i = tid; i <= (genome_length_bytes * NUCLEOTIDES_PER_BYTE) - GUIDE_SIZE_NUCLEOTIDES + 1;
+    for (i = tid; i <= (genome_length_bytes * NT_PER_BYTE) - GUIDE_SIZE_NT + 1;
             i += gridDim.x * blockDim.x) {
         for (j = 0; j < num_guides; j++) {
             guide = guides + (j * GUIDE_BUFFER_SIZE);
 
             mismatches = 0;
-            for (k = 0; k < GUIDE_SIZE_NUCLEOTIDES; k++) {
+            for (k = 0; k < GUIDE_SIZE_NT; k++) {
                 genome_nucleotide = get_nucleotide_from_index(genome, i + k);
                 guide_nucleotide = get_nucleotide_from_index(guide, k);
                 mismatches += genome_nucleotide != guide_nucleotide;
@@ -244,7 +244,7 @@ void gpu_guide_matching(
 
     switch (method) {
         case naive: 
-            dim3 dimGrid(ceil((genome_length_bytes * NUCLEOTIDES_PER_BYTE) / double(TILE_WIDTH)));
+            dim3 dimGrid(ceil((genome_length_bytes * NT_PER_BYTE) / double(TILE_WIDTH)));
             dim3 dimBlock(TILE_WIDTH);
             naive_gpu_guide_matching_kernel<<<dimGrid, dimBlock>>>(
                     deviceGenome,
