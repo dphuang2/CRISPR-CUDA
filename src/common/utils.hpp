@@ -342,13 +342,14 @@ struct timer_entry {
     THROW_IF_ERROR(cudaEventRecord(start));
   };
 
-  void log() {
+  float log() {
     float msecTotal = 0.0f;
     THROW_IF_ERROR(cudaEventRecord(stop));
     THROW_IF_ERROR(cudaEventSynchronize(stop));
     THROW_IF_ERROR(cudaEventElapsedTime(&msecTotal, start, stop));
     const std::string to_print = msg + " took " + ANSI_COLOR_GREEN + std::to_string(msecTotal) + "ms" + ANSI_COLOR_RESET;
     printf(ANSI_COLOR_BLUE "TIMER::" ANSI_COLOR_RESET " %s\n", to_print.c_str());
+    return msecTotal;
   }
 
   ~timer_entry() {
@@ -365,9 +366,10 @@ static void timer_start(const std::string &msg) {
   detail::timer_table.emplace(new detail::timer_entry(msg));
 }
 
-static void timer_stop() {
+static float timer_stop() {
   auto entry = detail::timer_table.back();
-  entry->log();
+  float msecTotal = entry->log();
   detail::timer_table.pop();
   delete entry;
+  return msecTotal;
 }

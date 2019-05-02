@@ -393,6 +393,19 @@ void assert_results_equal(results_t cpuResults, uint64_t * gpuResults, int gpuNu
     PRINT("{}", successMessage);
 }
 
+void estimate_total_time(float msec, uint64_t genome_length_bytes) {
+    float multiplier = float(genome_length_bytes) / GENOME_TEST_LENGTH_BYTES;
+    msec *= multiplier;
+    float sec = msec / 100; // milliseconds to seconds
+    float min = sec / 60; // seconds to minutes
+    float hr = min / 60; // minutes to hours
+    PRINT("Estimated total time: {} hours ({} minutes)", hr, min);
+}
+
+/***************************************************************
+  MAIN FUNCTION
+***************************************************************/
+
 int main(int argc, char ** argv) {
     /*
      *Read the genome and guides into memory
@@ -417,10 +430,12 @@ int main(int argc, char ** argv) {
     uint64_t sizeOfResults = num_guides * MATCHES_PER_GUIDE * sizeof(uint64_t);
     uint64_t * hostResults = (uint64_t *) malloc(sizeOfResults);
     int hostNumResults;
+    float msec;
 
     timer_start("Naive CPU");
     results_truth = naive_cpu_guide_matching((char *) genome, GENOME_TEST_LENGTH_BYTES, (char *) guides, num_guides);
-    timer_stop();
+    msec = timer_stop();
+    estimate_total_time(msec, genome_length_bytes);
 
     PRINT("Ground truth results size: {}", results_truth.size());
 
@@ -435,7 +450,8 @@ int main(int argc, char ** argv) {
             &hostNumResults,
             sizeOfResults,
             method);
-    timer_stop();
+    msec = timer_stop();
+    estimate_total_time(msec, genome_length_bytes);
 
     PRINT("Naive GPU results size: {}", hostNumResults);
     assert_results_equal(results_truth, hostResults, hostNumResults);
