@@ -34,7 +34,9 @@ using namespace std;
  */
 #define MATCHES_PER_GUIDE 8000
 
-#define TILE_WIDTH 1024
+#define TILE_WIDTH 512
+#define COARSE_FAC 40
+#define COARSENED_TILE_WIDTH (TILE_WIDTH * COARSE_FAC)
 #define CONSTANT_MEMORY_SIZE (NUM_GUIDES * GUIDE_BUFFER_SIZE)
 
 #define CUDA_CHECK(stmt) checkCuda(stmt, __FILE__, __LINE__);
@@ -118,7 +120,7 @@ void assert_results_equal(results_t cpuResults, uint64_t * gpuResults, int gpuNu
         int guideIdx = (int) gpuResults[gpuResultsIdx];
         uint64_t genomeIdx = gpuResults[gpuResultsIdx + 1];
         tuple<int, uint64_t> match = make_tuple(guideIdx, genomeIdx);
-        if (!cpuResults.count(match) && !seen.count(match)) {
+        if (!cpuResults.count(match) || seen.count(match)) {
             PRINT("{}", failMessage);
             return;
         } else {
@@ -270,9 +272,6 @@ __global__ void shared_memory_gpu_kernel(
         }
 
         __syncthreads();
-        shared_genome[2 * tx] = 0;
-        shared_genome[2 * tx + 1] = 0;
-        __syncthreads();
     }
 }
 
@@ -330,8 +329,66 @@ __global__ void shared_constant_memory_gpu_kernel(
         }
 
         __syncthreads();
-        shared_genome[2 * tx] = 0;
-        shared_genome[2 * tx + 1] = 0;
+    }
+}
+
+/***************************************************************
+  COARSENED SHARED MEMORY & CONSTANT MEMORY GPU IMPLEMENTATION
+***************************************************************/
+
+__global__ void coarsened_shared_constant_memory_gpu_kernel(
+        char * genome,
+        uint64_t genome_length,
+        char * guides,
+        int num_guides,
+        uint64_t * results,
+        int * numResults,
+        uint64_t sizeOfResults)
+{
+    uint64_t tx = threadIdx.x;
+    uint64_t tid = blockDim.x * blockIdx.x + tx;
+    int numResultsLocal;
+    int resultsIdx;
+    char * guide;
+    uint64_t i, b_start;
+    int mismatches;
+    int j, k, n, t_start;
+    char rc[GUIDE_SIZE + COARSE_FAC];
+
+    __shared__ char shared_genome[TILE_WIDTH * (COARSE_FAC + 1)];
+
+    for (i = tid * COARSE_FAC; i < genome_length - GUIDE_SIZE - 1; i += COARSE_FAC * gridDim.x * blockDim.x) {
+
+        b_start = (i / (blockDim.x * COARSE_FAC)) * blockDim.x * COARSE_FAC;
+        t_start = (COARSE_FAC + 1) * tx;
+
+        for (n = 0; n < COARSE_FAC + 1; n++) {
+            if (b_start + t_start + n < genome_length)
+                shared_genome[t_start + n] = genome[b_start + t_start + n];
+        }
+        __syncthreads();
+
+        for (n = 0; n < GUIDE_SIZE + COARSE_FAC; n++)
+            rc[n] = shared_genome[COARSE_FAC * tx + n];
+
+        for (n = 0; n < COARSE_FAC; n++) {
+            for (j = 0; j < num_guides; j++) {
+                guide = constant_guides + (j * GUIDE_BUFFER_SIZE);
+                mismatches = 0;
+                for (k = 0; k < GUIDE_SIZE; k++)
+                    mismatches += rc[n + k] != guide[k];
+
+                if (mismatches <= EDIT_DISTANCE_THRESHOLD) {
+                    numResultsLocal = atomicAdd(numResults, 1);
+                    if (numResultsLocal < sizeOfResults) {
+                        resultsIdx = numResultsLocal * 2;
+                        results[resultsIdx] = (uint64_t) j;
+                        results[resultsIdx + 1] = i + n;
+                    }
+                }
+            }
+        }
+
         __syncthreads();
     }
 }
@@ -340,7 +397,7 @@ __global__ void shared_constant_memory_gpu_kernel(
   GPU KERNEL LAUNCHER
 ***************************************************************/
 
-enum methods {naive, s_memory, s_c_memory};
+enum methods {naive, s_memory, s_c_memory, coarsened_s_c_memory};
 void gpu_guide_matching(
         char * genome,
         uint64_t genome_length,
@@ -366,6 +423,7 @@ void gpu_guide_matching(
 
     dim3 dimGridNaive(ceil((genome_length) / double(TILE_WIDTH)));
     dim3 dimBlockNaive(TILE_WIDTH);
+    dim3 dimGridCoarsened(ceil(genome_length / double(TILE_WIDTH * COARSE_FAC)));
     switch (method) {
         case naive: 
             naive_gpu_kernel<<<dimGridNaive, dimBlockNaive>>>(
@@ -392,6 +450,18 @@ void gpu_guide_matching(
         case s_c_memory:
             CUDA_CHECK(cudaMemcpyToSymbol(constant_guides, deviceGuides, CONSTANT_MEMORY_SIZE));
             shared_constant_memory_gpu_kernel<<<dimGridNaive, dimBlockNaive>>>(
+                    deviceGenome,
+                    genome_length,
+                    deviceGuides,
+                    num_guides,
+                    deviceResults,
+                    deviceNumResults,
+                    sizeOfResults
+                    );
+            break;
+        case coarsened_s_c_memory:
+            CUDA_CHECK(cudaMemcpyToSymbol(constant_guides, deviceGuides, CONSTANT_MEMORY_SIZE));
+            coarsened_shared_constant_memory_gpu_kernel<<<dimGridCoarsened, dimBlockNaive>>>(
                     deviceGenome,
                     genome_length,
                     deviceGuides,
@@ -442,16 +512,18 @@ int main(int argc, char ** argv) {
     int hostNumResults;
 
     // For testing smaller lengths
-    uint64_t genome_length_test = 1000000 * 10;
+    uint64_t genome_length_test = genome_length;
 
-    timer_start("Naive CPU");
-    results_truth = naive_cpu_guide_matching(genome, genome_length_test, guides, num_guides);
-    msec = timer_stop();
-    estimate_total_time(msec, genome_length, genome_length_test);
-
-    PRINT("Ground truth results size: {}", results_truth.size());
+    /*
+     *timer_start("Naive CPU");
+     *results_truth = naive_cpu_guide_matching(genome, genome_length_test, guides, num_guides);
+     *msec = timer_stop();
+     *estimate_total_time(msec, genome_length, genome_length_test);
+     *PRINT("Ground truth results size: {}", results_truth.size());
+     */
 
     methods method;
+
     timer_start("Naive GPU");
     method = naive;
     gpu_guide_matching(
@@ -465,11 +537,10 @@ int main(int argc, char ** argv) {
             method);
     msec = timer_stop();
     estimate_total_time(msec, genome_length, genome_length_test);
-
     PRINT("Naive GPU results size: {}", hostNumResults);
     assert_results_equal(results_truth, hostResults, hostNumResults);
 
-    timer_start("Shared Memory GPU");
+    timer_start("shared memory gpu");
     method = s_memory;
     gpu_guide_matching(
             genome,
@@ -482,7 +553,6 @@ int main(int argc, char ** argv) {
             method);
     msec = timer_stop();
     estimate_total_time(msec, genome_length, genome_length_test);
-
     PRINT("Shared Memory GPU results size: {}", hostNumResults);
     assert_results_equal(results_truth, hostResults, hostNumResults);
 
@@ -499,8 +569,23 @@ int main(int argc, char ** argv) {
             s_c_memory);
     msec = timer_stop();
     estimate_total_time(msec, genome_length, genome_length_test);
-
     PRINT("Shared + Constant Memory GPU results size: {}", hostNumResults);
+    assert_results_equal(results_truth, hostResults, hostNumResults);
+
+    timer_start("Coarsened Shared + Constant Memory GPU");
+    method = s_c_memory;
+    gpu_guide_matching(
+            genome,
+            genome_length_test,
+            guides,
+            num_guides,
+            hostResults,
+            &hostNumResults,
+            sizeOfResults,
+            coarsened_s_c_memory);
+    msec = timer_stop();
+    estimate_total_time(msec, genome_length, genome_length_test);
+    PRINT("Coarsened Shared + Constant Memory GPU results size: {}", hostNumResults);
     assert_results_equal(results_truth, hostResults, hostNumResults);
 
     /*
