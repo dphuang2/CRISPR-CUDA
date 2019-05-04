@@ -35,7 +35,6 @@ using namespace std;
  */
 #define MATCHES_PER_GUIDE 8000
 
-#define MAX_SHARED_MEMORY 49152
 #define TILE_WIDTH 1024
 #define COARSE_REG 64
 #define COARSE_SHARED 32
@@ -47,12 +46,11 @@ using namespace std;
 #define NUM_WARPS (TILE_WIDTH / WARP_SIZE)
 
 // Maximum number of elements that can be inserted into a block queue
-#define BQ_CAPACITY 2048
-
-#define NUM_ELEM_PER_THREAD BQ_CAPACITY / BLOCK_SIZE
+#define BQ_CAPACITY 1024
+#define BQ_ELEM_PER_THREAD (BQ_CAPACITY / TILE_WIDTH)
 
 // Maximum number of elements that can be inserted into a warp queue
-#define WQ_CAPACITY 1024
+#define WQ_CAPACITY 32
 #define WQ_ELEM_PER_THREAD (WQ_CAPACITY / WARP_SIZE)
 
 
@@ -188,7 +186,7 @@ results_t naive_cpu_guide_matching(char * genome, int64_t genome_length, char * 
   GPU HELPER FUNCTIONS
 ***************************************************************/
 
-__device__ void insert_into_queue(
+__device__ bool insert_into_queue(
         int64_t * queue,
         int64_t capacity,
         int * counter,
@@ -201,7 +199,9 @@ __device__ void insert_into_queue(
         int queue_idx = results_idx * 2;
         queue[queue_idx] = (int64_t) guide_idx;
         queue[queue_idx + 1] = sequence_idx;
+        return true;
     }
+    return false;
 }
 
 /***************************************************************
@@ -401,18 +401,30 @@ __global__ void coarsened_register_tiling_shared_guides_wq_gpu_kernel(
     int64_t i;
     int mismatches;
     int n, j, k, next_idx;
+    int warpIdx = threadIdx.x % WARP_SIZE;
+    int queueIdx;
     char rc[GUIDE_SIZE + COARSE_REG];
 
     __shared__ char shared_guides[SIZE_OF_GUIDES];
 
-    __shared__ unsigned int blockQueue[BQ_CAPACITY];
-    __shared__ unsigned int warpQueue[WQ_CAPACITY][NUM_WARPS];
+    __shared__ int64_t blockQueue[BQ_CAPACITY * 2];
+    __shared__ int64_t warpQueue[NUM_WARPS][WQ_CAPACITY * 2];
 
-    __shared__ unsigned int blockQueueSize[1];
-    __shared__ unsigned int warpQueueSize[NUM_WARPS];
-    __shared__ unsigned int blockQueueOffset[NUM_WARPS];
-    __shared__ unsigned int globalQueueOffset[1];
+    __shared__ int blockQueueSize[1];
+    __shared__ int warpQueueSize[NUM_WARPS];
+    __shared__ int blockQueueOffset[NUM_WARPS];
+    __shared__ int globalQueueOffset[1];
 
+    // Reset shared memory cause its set for some reason
+    if (tx == 0) {
+        blockQueueSize[0] = 0;
+        globalQueueOffset[0] = 0;
+    }
+
+    if (tx < NUM_WARPS) {
+        warpQueueSize[tx] = 0;
+        blockQueueOffset[tx] = 0;
+    }
 
     if (tx < SIZE_OF_GUIDES)
         shared_guides[tx] = guides[tx]; 
@@ -437,11 +449,59 @@ __global__ void coarsened_register_tiling_shared_guides_wq_gpu_kernel(
                     mismatches += rc[k + n] != guide[k];
 
                 if (mismatches <= EDIT_DISTANCE_THRESHOLD) {
-                    insert_into_queue(results, sizeOfResults, numResults, j, i + n);
+                    // Insert into warp queue
+                    if (!insert_into_queue(warpQueue[warpIdx], WQ_CAPACITY,
+                                &warpQueueSize[warpIdx], j, i + n)) {
+                        // Insert into block queue
+                        if(!insert_into_queue(blockQueue, BQ_CAPACITY,
+                                    blockQueueSize, j, i + n)) {
+                            // Insert into global queue
+                            insert_into_queue(results, sizeOfResults,
+                                    numResults, j, i + n);
+                        }
+                    }
                 }
             }
         }
     }
+
+      __syncthreads();
+
+      // Perform scan on first thread
+      if (threadIdx.x == 0 ) {
+          for (i = 1; i < NUM_WARPS; i++) 
+              blockQueueOffset[i] = blockQueueOffset[i - 1] + warpQueueSize[i - 1];
+          blockQueueSize[0] = blockQueueOffset[NUM_WARPS - 1] + warpQueueSize[NUM_WARPS - 1];
+          globalQueueOffset[0] = atomicAdd(numResults, blockQueueSize[0]);
+      }
+
+      // warp queue -> block queue data transfer
+      int warpThreadIdx = threadIdx.x % WARP_SIZE;
+      int blockQueueIdx, warpQueueIdx;
+      queueIdx = warpThreadIdx * WQ_ELEM_PER_THREAD;
+      for (i = 0; i < WQ_ELEM_PER_THREAD; i++) {
+          if (queueIdx + i < warpQueueSize[warpIdx]) {
+              blockQueueIdx = 2 * (blockQueueOffset[warpIdx] + queueIdx + i);
+              warpQueueIdx = 2 * (queueIdx + i);
+              
+              blockQueue[blockQueueIdx] = warpQueue[warpIdx][warpQueueIdx];
+              blockQueue[blockQueueIdx + 1] = warpQueue[warpIdx][warpQueueIdx + 1];
+          }
+      }
+
+      __syncthreads();
+
+      // block queue -> global queue data transfer
+      queueIdx = threadIdx.x * BQ_ELEM_PER_THREAD;
+      int globalQueueIdx;
+      for (i = 0; i < BQ_ELEM_PER_THREAD; i++) {
+          if (queueIdx + i < blockQueueSize[0]) {
+              globalQueueIdx = 2 * (globalQueueOffset[0] + queueIdx + i);
+              blockQueueIdx = 2 * (queueIdx + i);
+              results[globalQueueIdx] = blockQueue[blockQueueIdx];
+              results[globalQueueIdx + 1] = blockQueue[blockQueueIdx + 1];
+          }
+      }
 }
 
 /***************************************************************
@@ -754,6 +814,7 @@ void gpu_guide_matching(
     CUDA_CHECK(cudaFree(deviceResults));
     CUDA_CHECK(cudaFree(deviceGenome));
     CUDA_CHECK(cudaFree(deviceGuides));
+    CUDA_CHECK(cudaFree(deviceNumResults));
 }
 
 /***************************************************************
@@ -784,6 +845,7 @@ int main(int argc, char ** argv) {
     int hostNumResults;
 
     // For testing smaller lengths
+    /*int64_t genome_length_test = 100000;*/
     int64_t genome_length_test = genome_length;
 
     /*
