@@ -1,0 +1,1041 @@
+[32m✱ Checking your authentication credentials.[0m
+[33m✱ Preparing your project directory for upload.[0m
+[33m✱ Uploading your project directory. This may take a few minutes.[0m
+ 0 B / 141.93 KiB ┃░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░┃   0.00% 141.93 KiB / 141.93 KiB ┃▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓┃ 100.00% 1.38 MiB/s 141.93 KiB / 141.93 KiB ┃▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓┃ 100.00% 706.36 KiB/s 141.93 KiB / 141.93 KiB ┃▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓┃ 100.00% 573.79 KiB/s 0s
+[32m✱ Folder uploaded. Server is now processing your submission.[0m
+[32m✱ Your job request has been posted to the queue.[0m
+[37m⣾[0m Waiting for the server to process your request... [K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[37m⣽[0m Waiting for the server to process your request... [K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[33m✱ Server has accepted your job submission and started to configure the container.[0m
+[33m✱ Downloading your code.[0m
+[33m✱ Using balphi/crispr-cuda:4 as container image.[0m
+[33m✱ Starting container.[0m
+[32m✱ Running cp -r /src .[0m
+[32m✱ Running cmake /src[0m
+-- The CXX compiler identification is GNU 7.3.0
+-- The CUDA compiler identification is NVIDIA 10.0.130
+-- Check for working CXX compiler: /usr/bin/c++
+-- Check for working CXX compiler: /usr/bin/c++ -- works
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Check for working CUDA compiler: /usr/local/cuda/bin/nvcc
+-- Check for working CUDA compiler: /usr/local/cuda/bin/nvcc -- works
+-- Detecting CUDA compiler ABI info
+-- Detecting CUDA compiler ABI info - done
+-- Looking for C++ include pthread.h
+-- Looking for C++ include pthread.h - found
+-- Looking for pthread_create
+-- Looking for pthread_create - not found
+-- Looking for pthread_create in pthreads
+-- Looking for pthread_create in pthreads - not found
+-- Looking for pthread_create in pthread
+-- Looking for pthread_create in pthread - found
+-- Found Threads: TRUE  
+-- Found CUDA: /usr/local/cuda (found version "10.0") 
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /build
+[32m✱ Running make[0m
+[35m[1mScanning dependencies of target crispr-cuda[0m
+[ 33%] [32mBuilding CUDA object CMakeFiles/crispr-cuda.dir/main.cu.o[0m
+[ 66%] [32m[1mLinking CUDA device code CMakeFiles/crispr-cuda.dir/cmake_device_link.o[0m
+[100%] [32m[1mLinking CUDA executable crispr-cuda[0m
+[100%] Built target crispr-cuda
+[32m✱ Running ./crispr-cuda[0m
+[34mInfo:: [0mGenome length: 3049315783 nucleotides (bytes)
+[34mInfo:: [0mNumber of guides: 46
+[34mTIMER::[0m Naive CPU took [32m145.177094ms[0m
+[34mInfo:: [0mEstimated total time: 1.2297 hours (73.7818 minutes)
+[34mInfo:: [0mGround truth results size: 85
+[34mInfo:: [0mtest_length: 100000000
+[34mTIMER::[0m Naive GPU took [32m113.068092ms[0m
+[34mInfo:: [0mEstimated total time: 0.00957723 hours (0.574634 minutes)
+[34mInfo:: [0mNaive GPU results size: 5125
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Shared + Constant Memory GPU took [32m82.215363ms[0m
+[34mInfo:: [0mEstimated total time: 0.00696391 hours (0.417834 minutes)
+[34mInfo:: [0mShared Memory GPU results size: 5125
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Shared Memory GPU took [32m76.273666ms[0m
+[34mInfo:: [0mEstimated total time: 0.00646062 hours (0.387637 minutes)
+[34mInfo:: [0mShared Memory GPU results size: 5125
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register + Shared Memory GPU took [32m88.241341ms[0m
+[34mInfo:: [0mEstimated total time: 0.00747433 hours (0.44846 minutes)
+[34mInfo:: [0mCoarsened Register + Shared Memory GPU results size: 5124
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Register Tiling GPU took [32m90.335327ms[0m
+[34mInfo:: [0mEstimated total time: 0.00765169 hours (0.459102 minutes)
+[34mInfo:: [0mRegister Tiling GPU results size: 5125
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling GPU took [32m78.274208ms[0m
+[34mInfo:: [0mEstimated total time: 0.00663008 hours (0.397805 minutes)
+[34mInfo:: [0mCoarsened Register Tiling GPU results size: 5125
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling + Shared Guides GPU took [32m75.825630ms[0m
+[34mInfo:: [0mEstimated total time: 0.00642267 hours (0.38536 minutes)
+[34mInfo:: [0mCoarsened Register Tiling + Shared Guides GPU results size: 5125
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling + Warp Queue + Shared Guides GPU took [32m78.944931ms[0m
+[34mInfo:: [0mEstimated total time: 0.00668689 hours (0.401213 minutes)
+[34mInfo:: [0mCoarsened Register Tiling + Warp Queue + Shared Guides GPU results size: 5125
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0mtest_length: 200000000
+[34mTIMER::[0m Naive GPU took [32m206.166275ms[0m
+[34mInfo:: [0mEstimated total time: 0.00873147 hours (0.523888 minutes)
+[34mInfo:: [0mNaive GPU results size: 8746
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Shared + Constant Memory GPU took [32m153.564743ms[0m
+[34mInfo:: [0mEstimated total time: 0.00650371 hours (0.390223 minutes)
+[34mInfo:: [0mShared Memory GPU results size: 8746
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Shared Memory GPU took [32m150.342819ms[0m
+[34mInfo:: [0mEstimated total time: 0.00636726 hours (0.382036 minutes)
+[34mInfo:: [0mShared Memory GPU results size: 8746
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register + Shared Memory GPU took [32m150.215805ms[0m
+[34mInfo:: [0mEstimated total time: 0.00636188 hours (0.381713 minutes)
+[34mInfo:: [0mCoarsened Register + Shared Memory GPU results size: 8747
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Register Tiling GPU took [32m179.331512ms[0m
+[34mInfo:: [0mEstimated total time: 0.00759498 hours (0.455699 minutes)
+[34mInfo:: [0mRegister Tiling GPU results size: 8746
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling GPU took [32m149.598724ms[0m
+[34mInfo:: [0mEstimated total time: 0.00633575 hours (0.380145 minutes)
+[34mInfo:: [0mCoarsened Register Tiling GPU results size: 8746
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling + Shared Guides GPU took [32m147.771103ms[0m
+[34mInfo:: [0mEstimated total time: 0.00625834 hours (0.375501 minutes)
+[34mInfo:: [0mCoarsened Register Tiling + Shared Guides GPU results size: 8746
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling + Warp Queue + Shared Guides GPU took [32m153.869049ms[0m
+[34mInfo:: [0mEstimated total time: 0.0065166 hours (0.390996 minutes)
+[34mInfo:: [0mCoarsened Register Tiling + Warp Queue + Shared Guides GPU results size: 8746
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0mtest_length: 300000000
+[34mTIMER::[0m Naive GPU took [32m311.643890ms[0m
+[34mInfo:: [0mEstimated total time: 0.00879908 hours (0.527945 minutes)
+[34mInfo:: [0mNaive GPU results size: 12304
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Shared + Constant Memory GPU took [32m232.582535ms[0m
+[34mInfo:: [0mEstimated total time: 0.00656683 hours (0.39401 minutes)
+[34mInfo:: [0mShared Memory GPU results size: 12304
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Shared Memory GPU took [32m225.090530ms[0m
+[34mInfo:: [0mEstimated total time: 0.0063553 hours (0.381318 minutes)
+[34mInfo:: [0mShared Memory GPU results size: 12304
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register + Shared Memory GPU took [32m226.063202ms[0m
+[34mInfo:: [0mEstimated total time: 0.00638276 hours (0.382966 minutes)
+[34mInfo:: [0mCoarsened Register + Shared Memory GPU results size: 12304
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Register Tiling GPU took [32m268.509705ms[0m
+[34mInfo:: [0mEstimated total time: 0.00758121 hours (0.454873 minutes)
+[34mInfo:: [0mRegister Tiling GPU results size: 12304
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling GPU took [32m222.618210ms[0m
+[34mInfo:: [0mEstimated total time: 0.00628549 hours (0.37713 minutes)
+[34mInfo:: [0mCoarsened Register Tiling GPU results size: 12304
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling + Shared Guides GPU took [32m222.579514ms[0m
+[34mInfo:: [0mEstimated total time: 0.0062844 hours (0.377064 minutes)
+[34mInfo:: [0mCoarsened Register Tiling + Shared Guides GPU results size: 12304
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling + Warp Queue + Shared Guides GPU took [32m228.894180ms[0m
+[34mInfo:: [0mEstimated total time: 0.00646269 hours (0.387761 minutes)
+[34mInfo:: [0mCoarsened Register Tiling + Warp Queue + Shared Guides GPU results size: 12304
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0mtest_length: 400000000
+[34mTIMER::[0m Naive GPU took [32m413.862030ms[0m
+[34mInfo:: [0mEstimated total time: 0.00876386 hours (0.525832 minutes)
+[34mInfo:: [0mNaive GPU results size: 17035
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Shared + Constant Memory GPU took [32m306.311371ms[0m
+[34mInfo:: [0mEstimated total time: 0.00648639 hours (0.389183 minutes)
+[34mInfo:: [0mShared Memory GPU results size: 17035
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Shared Memory GPU took [32m299.731445ms[0m
+[34mInfo:: [0mEstimated total time: 0.00634705 hours (0.380823 minutes)
+[34mInfo:: [0mShared Memory GPU results size: 17035
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register + Shared Memory GPU took [32m297.536713ms[0m
+[34mInfo:: [0mEstimated total time: 0.00630058 hours (0.378035 minutes)
+[34mInfo:: [0mCoarsened Register + Shared Memory GPU results size: 17035
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Register Tiling GPU took [32m359.698669ms[0m
+[34mInfo:: [0mEstimated total time: 0.00761691 hours (0.457015 minutes)
+[34mInfo:: [0mRegister Tiling GPU results size: 17035
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling GPU took [32m295.461884ms[0m
+[34mInfo:: [0mEstimated total time: 0.00625664 hours (0.375399 minutes)
+[34mInfo:: [0mCoarsened Register Tiling GPU results size: 17035
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling + Shared Guides GPU took [32m291.863342ms[0m
+[34mInfo:: [0mEstimated total time: 0.00618044 hours (0.370826 minutes)
+[34mInfo:: [0mCoarsened Register Tiling + Shared Guides GPU results size: 17035
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling + Warp Queue + Shared Guides GPU took [32m306.265961ms[0m
+[34mInfo:: [0mEstimated total time: 0.00648543 hours (0.389126 minutes)
+[34mInfo:: [0mCoarsened Register Tiling + Warp Queue + Shared Guides GPU results size: 17035
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0mtest_length: 500000000
+[34mTIMER::[0m Naive GPU took [32m517.951294ms[0m
+[34mInfo:: [0mEstimated total time: 0.00877443 hours (0.526466 minutes)
+[34mInfo:: [0mNaive GPU results size: 21221
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Shared + Constant Memory GPU took [32m385.249084ms[0m
+[34mInfo:: [0mEstimated total time: 0.00652637 hours (0.391582 minutes)
+[34mInfo:: [0mShared Memory GPU results size: 21221
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Shared Memory GPU took [32m374.470215ms[0m
+[34mInfo:: [0mEstimated total time: 0.00634377 hours (0.380626 minutes)
+[34mInfo:: [0mShared Memory GPU results size: 21221
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register + Shared Memory GPU took [32m371.444366ms[0m
+[34mInfo:: [0mEstimated total time: 0.00629251 hours (0.37755 minutes)
+[34mInfo:: [0mCoarsened Register + Shared Memory GPU results size: 21220
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Register Tiling GPU took [32m448.771515ms[0m
+[34mInfo:: [0mEstimated total time: 0.00760248 hours (0.456149 minutes)
+[34mInfo:: [0mRegister Tiling GPU results size: 21221
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling GPU took [32m368.409241ms[0m
+[34mInfo:: [0mEstimated total time: 0.00624109 hours (0.374465 minutes)
+[34mInfo:: [0mCoarsened Register Tiling GPU results size: 21221
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling + Shared Guides GPU took [32m363.968536ms[0m
+[34mInfo:: [0mEstimated total time: 0.00616586 hours (0.369952 minutes)
+[34mInfo:: [0mCoarsened Register Tiling + Shared Guides GPU results size: 21221
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling + Warp Queue + Shared Guides GPU took [32m378.844421ms[0m
+[34mInfo:: [0mEstimated total time: 0.00641787 hours (0.385072 minutes)
+[34mInfo:: [0mCoarsened Register Tiling + Warp Queue + Shared Guides GPU results size: 21221
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0mtest_length: 600000000
+[34mTIMER::[0m Naive GPU took [32m627.450073ms[0m
+[34mInfo:: [0mEstimated total time: 0.00885784 hours (0.53147 minutes)
+[34mInfo:: [0mNaive GPU results size: 24567
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Shared + Constant Memory GPU took [32m464.382202ms[0m
+[34mInfo:: [0mEstimated total time: 0.00655578 hours (0.393347 minutes)
+[34mInfo:: [0mShared Memory GPU results size: 24567
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Shared Memory GPU took [32m453.281494ms[0m
+[34mInfo:: [0mEstimated total time: 0.00639907 hours (0.383944 minutes)
+[34mInfo:: [0mShared Memory GPU results size: 24567
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register + Shared Memory GPU took [32m446.534637ms[0m
+[34mInfo:: [0mEstimated total time: 0.00630382 hours (0.378229 minutes)
+[34mInfo:: [0mCoarsened Register + Shared Memory GPU results size: 24567
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Register Tiling GPU took [32m563.233643ms[0m
+[34mInfo:: [0mEstimated total time: 0.00795128 hours (0.477077 minutes)
+[34mInfo:: [0mRegister Tiling GPU results size: 24567
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling GPU took [32m441.377655ms[0m
+[34mInfo:: [0mEstimated total time: 0.00623102 hours (0.373861 minutes)
+[34mInfo:: [0mCoarsened Register Tiling GPU results size: 24567
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling + Shared Guides GPU took [32m438.140991ms[0m
+[34mInfo:: [0mEstimated total time: 0.00618532 hours (0.371119 minutes)
+[34mInfo:: [0mCoarsened Register Tiling + Shared Guides GPU results size: 24567
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling + Warp Queue + Shared Guides GPU took [32m454.555603ms[0m
+[34mInfo:: [0mEstimated total time: 0.00641705 hours (0.385023 minutes)
+[34mInfo:: [0mCoarsened Register Tiling + Warp Queue + Shared Guides GPU results size: 24567
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0mtest_length: 700000000
+[34mTIMER::[0m Naive GPU took [32m725.707153ms[0m
+[34mInfo:: [0mEstimated total time: 0.00878139 hours (0.526883 minutes)
+[34mInfo:: [0mNaive GPU results size: 28317
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Shared + Constant Memory GPU took [32m540.575134ms[0m
+[34mInfo:: [0mEstimated total time: 0.00654121 hours (0.392472 minutes)
+[34mInfo:: [0mShared Memory GPU results size: 28317
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Shared Memory GPU took [32m523.745605ms[0m
+[34mInfo:: [0mEstimated total time: 0.00633756 hours (0.380254 minutes)
+[34mInfo:: [0mShared Memory GPU results size: 28317
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register + Shared Memory GPU took [32m519.251892ms[0m
+[34mInfo:: [0mEstimated total time: 0.00628319 hours (0.376991 minutes)
+[34mInfo:: [0mCoarsened Register + Shared Memory GPU results size: 28317
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Register Tiling GPU took [32m625.281616ms[0m
+[34mInfo:: [0mEstimated total time: 0.00756619 hours (0.453972 minutes)
+[34mInfo:: [0mRegister Tiling GPU results size: 28317
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling GPU took [32m545.615662ms[0m
+[34mInfo:: [0mEstimated total time: 0.0066022 hours (0.396132 minutes)
+[34mInfo:: [0mCoarsened Register Tiling GPU results size: 28317
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling + Shared Guides GPU took [32m509.019379ms[0m
+[34mInfo:: [0mEstimated total time: 0.00615937 hours (0.369562 minutes)
+[34mInfo:: [0mCoarsened Register Tiling + Shared Guides GPU results size: 28317
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling + Warp Queue + Shared Guides GPU took [32m534.283386ms[0m
+[34mInfo:: [0mEstimated total time: 0.00646507 hours (0.387904 minutes)
+[34mInfo:: [0mCoarsened Register Tiling + Warp Queue + Shared Guides GPU results size: 28317
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0mtest_length: 800000000
+[34mTIMER::[0m Naive GPU took [32m829.708496ms[0m
+[34mInfo:: [0mEstimated total time: 0.00878487 hours (0.527092 minutes)
+[34mInfo:: [0mNaive GPU results size: 31669
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Shared + Constant Memory GPU took [32m618.607178ms[0m
+[34mInfo:: [0mEstimated total time: 0.00654975 hours (0.392985 minutes)
+[34mInfo:: [0mShared Memory GPU results size: 31669
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Shared Memory GPU took [32m604.483215ms[0m
+[34mInfo:: [0mEstimated total time: 0.00640021 hours (0.384013 minutes)
+[34mInfo:: [0mShared Memory GPU results size: 31669
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register + Shared Memory GPU took [32m593.021057ms[0m
+[34mInfo:: [0mEstimated total time: 0.00627885 hours (0.376731 minutes)
+[34mInfo:: [0mCoarsened Register + Shared Memory GPU results size: 31669
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Register Tiling GPU took [32m714.376526ms[0m
+[34mInfo:: [0mEstimated total time: 0.00756375 hours (0.453825 minutes)
+[34mInfo:: [0mRegister Tiling GPU results size: 31669
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling GPU took [32m589.503540ms[0m
+[34mInfo:: [0mEstimated total time: 0.00624161 hours (0.374496 minutes)
+[34mInfo:: [0mCoarsened Register Tiling GPU results size: 31669
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling + Shared Guides GPU took [32m580.546570ms[0m
+[34mInfo:: [0mEstimated total time: 0.00614677 hours (0.368806 minutes)
+[34mInfo:: [0mCoarsened Register Tiling + Shared Guides GPU results size: 31669
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling + Warp Queue + Shared Guides GPU took [32m605.314026ms[0m
+[34mInfo:: [0mEstimated total time: 0.00640901 hours (0.38454 minutes)
+[34mInfo:: [0mCoarsened Register Tiling + Warp Queue + Shared Guides GPU results size: 31669
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0mtest_length: 900000000
+[34mTIMER::[0m Naive GPU took [32m940.825562ms[0m
+[34mInfo:: [0mEstimated total time: 0.00885455 hours (0.531273 minutes)
+[34mInfo:: [0mNaive GPU results size: 36569
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Shared + Constant Memory GPU took [32m687.898071ms[0m
+[34mInfo:: [0mEstimated total time: 0.00647413 hours (0.388448 minutes)
+[34mInfo:: [0mShared Memory GPU results size: 36569
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Shared Memory GPU took [32m674.409851ms[0m
+[34mInfo:: [0mEstimated total time: 0.00634719 hours (0.380831 minutes)
+[34mInfo:: [0mShared Memory GPU results size: 36569
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register + Shared Memory GPU took [32m666.803223ms[0m
+[34mInfo:: [0mEstimated total time: 0.0062756 hours (0.376536 minutes)
+[34mInfo:: [0mCoarsened Register + Shared Memory GPU results size: 36569
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Register Tiling GPU took [32m808.251099ms[0m
+[34mInfo:: [0mEstimated total time: 0.00760683 hours (0.45641 minutes)
+[34mInfo:: [0mRegister Tiling GPU results size: 36569
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling GPU took [32m667.924683ms[0m
+[34mInfo:: [0mEstimated total time: 0.00628615 hours (0.377169 minutes)
+[34mInfo:: [0mCoarsened Register Tiling GPU results size: 36569
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling + Shared Guides GPU took [32m659.839539ms[0m
+[34mInfo:: [0mEstimated total time: 0.00621006 hours (0.372604 minutes)
+[34mInfo:: [0mCoarsened Register Tiling + Shared Guides GPU results size: 36569
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling + Warp Queue + Shared Guides GPU took [32m681.432373ms[0m
+[34mInfo:: [0mEstimated total time: 0.00641328 hours (0.384797 minutes)
+[34mInfo:: [0mCoarsened Register Tiling + Warp Queue + Shared Guides GPU results size: 36569
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0mtest_length: 1000000000
+[34mTIMER::[0m Naive GPU took [32m1037.449707ms[0m
+[34mInfo:: [0mEstimated total time: 0.00878753 hours (0.527252 minutes)
+[34mInfo:: [0mNaive GPU results size: 42373
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Shared + Constant Memory GPU took [32m764.178650ms[0m
+[34mInfo:: [0mEstimated total time: 0.00647284 hours (0.38837 minutes)
+[34mInfo:: [0mShared Memory GPU results size: 42373
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Shared Memory GPU took [32m747.784424ms[0m
+[34mInfo:: [0mEstimated total time: 0.00633397 hours (0.380038 minutes)
+[34mInfo:: [0mShared Memory GPU results size: 42373
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register + Shared Memory GPU took [32m740.831604ms[0m
+[34mInfo:: [0mEstimated total time: 0.00627508 hours (0.376505 minutes)
+[34mInfo:: [0mCoarsened Register + Shared Memory GPU results size: 42373
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Register Tiling GPU took [32m892.763550ms[0m
+[34mInfo:: [0mEstimated total time: 0.00756199 hours (0.45372 minutes)
+[34mInfo:: [0mRegister Tiling GPU results size: 42373
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling GPU took [32m734.759338ms[0m
+[34mInfo:: [0mEstimated total time: 0.00622365 hours (0.373419 minutes)
+[34mInfo:: [0mCoarsened Register Tiling GPU results size: 42373
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling + Shared Guides GPU took [32m725.856506ms[0m
+[34mInfo:: [0mEstimated total time: 0.00614824 hours (0.368894 minutes)
+[34mInfo:: [0mCoarsened Register Tiling + Shared Guides GPU results size: 42373
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling + Warp Queue + Shared Guides GPU took [32m755.650330ms[0m
+[34mInfo:: [0mEstimated total time: 0.0064006 hours (0.384036 minutes)
+[34mInfo:: [0mCoarsened Register Tiling + Warp Queue + Shared Guides GPU results size: 42373
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0mtest_length: 1100000000
+[34mTIMER::[0m Naive GPU took [32m1141.386353ms[0m
+[34mInfo:: [0mEstimated total time: 0.00878901 hours (0.527341 minutes)
+[34mInfo:: [0mNaive GPU results size: 47429
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Shared + Constant Memory GPU took [32m842.330688ms[0m
+[34mInfo:: [0mEstimated total time: 0.00648619 hours (0.389172 minutes)
+[34mInfo:: [0mShared Memory GPU results size: 47429
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Shared Memory GPU took [32m822.437073ms[0m
+[34mInfo:: [0mEstimated total time: 0.00633301 hours (0.37998 minutes)
+[34mInfo:: [0mShared Memory GPU results size: 47429
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register + Shared Memory GPU took [32m815.006775ms[0m
+[34mInfo:: [0mEstimated total time: 0.00627579 hours (0.376547 minutes)
+[34mInfo:: [0mCoarsened Register + Shared Memory GPU results size: 47429
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Register Tiling GPU took [32m983.828369ms[0m
+[34mInfo:: [0mEstimated total time: 0.00757577 hours (0.454546 minutes)
+[34mInfo:: [0mRegister Tiling GPU results size: 47429
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling GPU took [32m809.211060ms[0m
+[34mInfo:: [0mEstimated total time: 0.00623116 hours (0.37387 minutes)
+[34mInfo:: [0mCoarsened Register Tiling GPU results size: 47429
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling + Shared Guides GPU took [32m802.197693ms[0m
+[34mInfo:: [0mEstimated total time: 0.00617716 hours (0.370629 minutes)
+[34mInfo:: [0mCoarsened Register Tiling + Shared Guides GPU results size: 47429
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling + Warp Queue + Shared Guides GPU took [32m837.882507ms[0m
+[34mInfo:: [0mEstimated total time: 0.00645194 hours (0.387116 minutes)
+[34mInfo:: [0mCoarsened Register Tiling + Warp Queue + Shared Guides GPU results size: 47429
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0mtest_length: 1200000000
+[34mTIMER::[0m Naive GPU took [32m1255.458618ms[0m
+[34mInfo:: [0mEstimated total time: 0.00886178 hours (0.531707 minutes)
+[34mInfo:: [0mNaive GPU results size: 52093
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Shared + Constant Memory GPU took [32m922.163086ms[0m
+[34mInfo:: [0mEstimated total time: 0.00650918 hours (0.390551 minutes)
+[34mInfo:: [0mShared Memory GPU results size: 52093
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Shared Memory GPU took [32m899.980469ms[0m
+[34mInfo:: [0mEstimated total time: 0.0063526 hours (0.381156 minutes)
+[34mInfo:: [0mShared Memory GPU results size: 52093
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register + Shared Memory GPU took [32m890.078186ms[0m
+[34mInfo:: [0mEstimated total time: 0.00628271 hours (0.376962 minutes)
+[34mInfo:: [0mCoarsened Register + Shared Memory GPU results size: 52093
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Register Tiling GPU took [32m1072.028076ms[0m
+[34mInfo:: [0mEstimated total time: 0.00756702 hours (0.454021 minutes)
+[34mInfo:: [0mRegister Tiling GPU results size: 52093
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling GPU took [32m880.330627ms[0m
+[34mInfo:: [0mEstimated total time: 0.0062139 hours (0.372834 minutes)
+[34mInfo:: [0mCoarsened Register Tiling GPU results size: 52093
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling + Shared Guides GPU took [32m870.340820ms[0m
+[34mInfo:: [0mEstimated total time: 0.00614339 hours (0.368603 minutes)
+[34mInfo:: [0mCoarsened Register Tiling + Shared Guides GPU results size: 52093
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling + Warp Queue + Shared Guides GPU took [32m906.179443ms[0m
+[34mInfo:: [0mEstimated total time: 0.00639636 hours (0.383782 minutes)
+[34mInfo:: [0mCoarsened Register Tiling + Warp Queue + Shared Guides GPU results size: 52093
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0mtest_length: 1300000000
+[34mTIMER::[0m Naive GPU took [32m1348.850830ms[0m
+[34mInfo:: [0mEstimated total time: 0.00878862 hours (0.527317 minutes)
+[34mInfo:: [0mNaive GPU results size: 56402
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Shared + Constant Memory GPU took [32m992.860718ms[0m
+[34mInfo:: [0mEstimated total time: 0.00646911 hours (0.388147 minutes)
+[34mInfo:: [0mShared Memory GPU results size: 56402
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Shared Memory GPU took [32m971.625305ms[0m
+[34mInfo:: [0mEstimated total time: 0.00633075 hours (0.379845 minutes)
+[34mInfo:: [0mShared Memory GPU results size: 56402
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register + Shared Memory GPU took [32m962.372437ms[0m
+[34mInfo:: [0mEstimated total time: 0.00627046 hours (0.376228 minutes)
+[34mInfo:: [0mCoarsened Register + Shared Memory GPU results size: 56402
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Register Tiling GPU took [32m1159.926392ms[0m
+[34mInfo:: [0mEstimated total time: 0.00755765 hours (0.453459 minutes)
+[34mInfo:: [0mRegister Tiling GPU results size: 56402
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling GPU took [32m953.964294ms[0m
+[34mInfo:: [0mEstimated total time: 0.00621568 hours (0.372941 minutes)
+[34mInfo:: [0mCoarsened Register Tiling GPU results size: 56402
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling + Shared Guides GPU took [32m942.767151ms[0m
+[34mInfo:: [0mEstimated total time: 0.00614272 hours (0.368563 minutes)
+[34mInfo:: [0mCoarsened Register Tiling + Shared Guides GPU results size: 56402
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling + Warp Queue + Shared Guides GPU took [32m981.555481ms[0m
+[34mInfo:: [0mEstimated total time: 0.00639545 hours (0.383727 minutes)
+[34mInfo:: [0mCoarsened Register Tiling + Warp Queue + Shared Guides GPU results size: 56402
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0mtest_length: 1400000000
+[34mTIMER::[0m Naive GPU took [32m1452.837158ms[0m
+[34mInfo:: [0mEstimated total time: 0.00879 hours (0.5274 minutes)
+[34mInfo:: [0mNaive GPU results size: 59742
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Shared + Constant Memory GPU took [32m1069.248657ms[0m
+[34mInfo:: [0mEstimated total time: 0.0064692 hours (0.388152 minutes)
+[34mInfo:: [0mShared Memory GPU results size: 59742
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Shared Memory GPU took [32m1046.400635ms[0m
+[34mInfo:: [0mEstimated total time: 0.00633096 hours (0.379858 minutes)
+[34mInfo:: [0mShared Memory GPU results size: 59742
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register + Shared Memory GPU took [32m1036.254517ms[0m
+[34mInfo:: [0mEstimated total time: 0.00626958 hours (0.376175 minutes)
+[34mInfo:: [0mCoarsened Register + Shared Memory GPU results size: 59742
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Register Tiling GPU took [32m1249.225220ms[0m
+[34mInfo:: [0mEstimated total time: 0.0075581 hours (0.453486 minutes)
+[34mInfo:: [0mRegister Tiling GPU results size: 59742
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling GPU took [32m1027.565796ms[0m
+[34mInfo:: [0mEstimated total time: 0.00621701 hours (0.373021 minutes)
+[34mInfo:: [0mCoarsened Register Tiling GPU results size: 59742
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling + Shared Guides GPU took [32m1014.952271ms[0m
+[34mInfo:: [0mEstimated total time: 0.00614069 hours (0.368442 minutes)
+[34mInfo:: [0mCoarsened Register Tiling + Shared Guides GPU results size: 59742
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling + Warp Queue + Shared Guides GPU took [32m1056.569336ms[0m
+[34mInfo:: [0mEstimated total time: 0.00639249 hours (0.383549 minutes)
+[34mInfo:: [0mCoarsened Register Tiling + Warp Queue + Shared Guides GPU results size: 59742
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0mtest_length: 1500000000
+[34mTIMER::[0m Naive GPU took [32m1556.972412ms[0m
+[34mInfo:: [0mEstimated total time: 0.00879204 hours (0.527522 minutes)
+[34mInfo:: [0mNaive GPU results size: 64088
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Shared + Constant Memory GPU took [32m1145.671021ms[0m
+[34mInfo:: [0mEstimated total time: 0.00646947 hours (0.388168 minutes)
+[34mInfo:: [0mShared Memory GPU results size: 64088
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Shared Memory GPU took [32m1120.979614ms[0m
+[34mInfo:: [0mEstimated total time: 0.00633004 hours (0.379802 minutes)
+[34mInfo:: [0mShared Memory GPU results size: 64088
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register + Shared Memory GPU took [32m1110.556763ms[0m
+[34mInfo:: [0mEstimated total time: 0.00627118 hours (0.376271 minutes)
+[34mInfo:: [0mCoarsened Register + Shared Memory GPU results size: 64088
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Register Tiling GPU took [32m1338.353760ms[0m
+[34mInfo:: [0mEstimated total time: 0.00755752 hours (0.453451 minutes)
+[34mInfo:: [0mRegister Tiling GPU results size: 64088
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling GPU took [32m1100.540771ms[0m
+[34mInfo:: [0mEstimated total time: 0.00621462 hours (0.372877 minutes)
+[34mInfo:: [0mCoarsened Register Tiling GPU results size: 64088
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling + Shared Guides GPU took [32m1087.048584ms[0m
+[34mInfo:: [0mEstimated total time: 0.00613843 hours (0.368306 minutes)
+[34mInfo:: [0mCoarsened Register Tiling + Shared Guides GPU results size: 64088
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling + Warp Queue + Shared Guides GPU took [32m1131.547241ms[0m
+[34mInfo:: [0mEstimated total time: 0.00638971 hours (0.383383 minutes)
+[34mInfo:: [0mCoarsened Register Tiling + Warp Queue + Shared Guides GPU results size: 64088
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0mtest_length: 1600000000
+[34mTIMER::[0m Naive GPU took [32m1660.693970ms[0m
+[34mInfo:: [0mEstimated total time: 0.00879163 hours (0.527498 minutes)
+[34mInfo:: [0mNaive GPU results size: 69715
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Shared + Constant Memory GPU took [32m1221.841797ms[0m
+[34mInfo:: [0mEstimated total time: 0.00646837 hours (0.388102 minutes)
+[34mInfo:: [0mShared Memory GPU results size: 69715
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Shared Memory GPU took [32m1195.571411ms[0m
+[34mInfo:: [0mEstimated total time: 0.0063293 hours (0.379758 minutes)
+[34mInfo:: [0mShared Memory GPU results size: 69715
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register + Shared Memory GPU took [32m1184.527954ms[0m
+[34mInfo:: [0mEstimated total time: 0.00627083 hours (0.37625 minutes)
+[34mInfo:: [0mCoarsened Register + Shared Memory GPU results size: 69715
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Register Tiling GPU took [32m1427.521973ms[0m
+[34mInfo:: [0mEstimated total time: 0.00755723 hours (0.453434 minutes)
+[34mInfo:: [0mRegister Tiling GPU results size: 69715
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling GPU took [32m1173.448120ms[0m
+[34mInfo:: [0mEstimated total time: 0.00621218 hours (0.372731 minutes)
+[34mInfo:: [0mCoarsened Register Tiling GPU results size: 69715
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling + Shared Guides GPU took [32m1159.068115ms[0m
+[34mInfo:: [0mEstimated total time: 0.00613605 hours (0.368163 minutes)
+[34mInfo:: [0mCoarsened Register Tiling + Shared Guides GPU results size: 69715
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling + Warp Queue + Shared Guides GPU took [32m1206.573364ms[0m
+[34mInfo:: [0mEstimated total time: 0.00638754 hours (0.383252 minutes)
+[34mInfo:: [0mCoarsened Register Tiling + Warp Queue + Shared Guides GPU results size: 69715
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0mtest_length: 1700000000
+[34mTIMER::[0m Naive GPU took [32m1764.675537ms[0m
+[34mInfo:: [0mEstimated total time: 0.00879257 hours (0.527554 minutes)
+[34mInfo:: [0mNaive GPU results size: 73013
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Shared + Constant Memory GPU took [32m1298.169434ms[0m
+[34mInfo:: [0mEstimated total time: 0.00646818 hours (0.388091 minutes)
+[34mInfo:: [0mShared Memory GPU results size: 73013
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Shared Memory GPU took [32m1270.281372ms[0m
+[34mInfo:: [0mEstimated total time: 0.00632923 hours (0.379754 minutes)
+[34mInfo:: [0mShared Memory GPU results size: 73013
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register + Shared Memory GPU took [32m1258.266724ms[0m
+[34mInfo:: [0mEstimated total time: 0.00626937 hours (0.376162 minutes)
+[34mInfo:: [0mCoarsened Register + Shared Memory GPU results size: 73014
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Register Tiling GPU took [32m1516.572998ms[0m
+[34mInfo:: [0mEstimated total time: 0.00755639 hours (0.453383 minutes)
+[34mInfo:: [0mRegister Tiling GPU results size: 73013
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling GPU took [32m1246.541138ms[0m
+[34mInfo:: [0mEstimated total time: 0.00621094 hours (0.372657 minutes)
+[34mInfo:: [0mCoarsened Register Tiling GPU results size: 73013
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling + Shared Guides GPU took [32m1231.378296ms[0m
+[34mInfo:: [0mEstimated total time: 0.00613539 hours (0.368124 minutes)
+[34mInfo:: [0mCoarsened Register Tiling + Shared Guides GPU results size: 73013
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling + Warp Queue + Shared Guides GPU took [32m1281.689331ms[0m
+[34mInfo:: [0mEstimated total time: 0.00638607 hours (0.383164 minutes)
+[34mInfo:: [0mCoarsened Register Tiling + Warp Queue + Shared Guides GPU results size: 73013
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0mtest_length: 1800000000
+[34mTIMER::[0m Naive GPU took [32m1868.322632ms[0m
+[34mInfo:: [0mEstimated total time: 0.00879183 hours (0.52751 minutes)
+[34mInfo:: [0mNaive GPU results size: 76874
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Shared + Constant Memory GPU took [32m1374.476807ms[0m
+[34mInfo:: [0mEstimated total time: 0.00646792 hours (0.388075 minutes)
+[34mInfo:: [0mShared Memory GPU results size: 76874
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Shared Memory GPU took [32m1344.939575ms[0m
+[34mInfo:: [0mEstimated total time: 0.00632893 hours (0.379736 minutes)
+[34mInfo:: [0mShared Memory GPU results size: 76874
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register + Shared Memory GPU took [32m1332.058228ms[0m
+[34mInfo:: [0mEstimated total time: 0.00626831 hours (0.376099 minutes)
+[34mInfo:: [0mCoarsened Register + Shared Memory GPU results size: 76874
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Register Tiling GPU took [32m1605.807495ms[0m
+[34mInfo:: [0mEstimated total time: 0.0075565 hours (0.45339 minutes)
+[34mInfo:: [0mRegister Tiling GPU results size: 76874
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling GPU took [32m1321.225464ms[0m
+[34mInfo:: [0mEstimated total time: 0.00621734 hours (0.37304 minutes)
+[34mInfo:: [0mCoarsened Register Tiling GPU results size: 76874
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling + Shared Guides GPU took [32m1303.544312ms[0m
+[34mInfo:: [0mEstimated total time: 0.00613413 hours (0.368048 minutes)
+[34mInfo:: [0mCoarsened Register Tiling + Shared Guides GPU results size: 76874
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling + Warp Queue + Shared Guides GPU took [32m1357.889648ms[0m
+[34mInfo:: [0mEstimated total time: 0.00638987 hours (0.383392 minutes)
+[34mInfo:: [0mCoarsened Register Tiling + Warp Queue + Shared Guides GPU results size: 76874
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0mtest_length: 1900000000
+[34mTIMER::[0m Naive GPU took [32m1971.880737ms[0m
+[34mInfo:: [0mEstimated total time: 0.00879077 hours (0.527446 minutes)
+[34mInfo:: [0mNaive GPU results size: 79748
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Shared + Constant Memory GPU took [32m1451.025757ms[0m
+[34mInfo:: [0mEstimated total time: 0.00646877 hours (0.388126 minutes)
+[34mInfo:: [0mShared Memory GPU results size: 79748
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Shared Memory GPU took [32m1419.686646ms[0m
+[34mInfo:: [0mEstimated total time: 0.00632905 hours (0.379743 minutes)
+[34mInfo:: [0mShared Memory GPU results size: 79748
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register + Shared Memory GPU took [32m1405.955933ms[0m
+[34mInfo:: [0mEstimated total time: 0.00626784 hours (0.376071 minutes)
+[34mInfo:: [0mCoarsened Register + Shared Memory GPU results size: 79748
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Register Tiling GPU took [32m1694.832275ms[0m
+[34mInfo:: [0mEstimated total time: 0.00755567 hours (0.45334 minutes)
+[34mInfo:: [0mRegister Tiling GPU results size: 79748
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling GPU took [32m1392.764648ms[0m
+[34mInfo:: [0mEstimated total time: 0.00620903 hours (0.372542 minutes)
+[34mInfo:: [0mCoarsened Register Tiling GPU results size: 79748
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling + Shared Guides GPU took [32m1375.623169ms[0m
+[34mInfo:: [0mEstimated total time: 0.00613262 hours (0.367957 minutes)
+[34mInfo:: [0mCoarsened Register Tiling + Shared Guides GPU results size: 79748
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling + Warp Queue + Shared Guides GPU took [32m1432.203491ms[0m
+[34mInfo:: [0mEstimated total time: 0.00638486 hours (0.383091 minutes)
+[34mInfo:: [0mCoarsened Register Tiling + Warp Queue + Shared Guides GPU results size: 79748
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0mtest_length: 2000000000
+[34mTIMER::[0m Naive GPU took [32m2076.134277ms[0m
+[34mInfo:: [0mEstimated total time: 0.00879276 hours (0.527566 minutes)
+[34mInfo:: [0mNaive GPU results size: 82888
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Shared + Constant Memory GPU took [32m1527.271973ms[0m
+[34mInfo:: [0mEstimated total time: 0.00646824 hours (0.388095 minutes)
+[34mInfo:: [0mShared Memory GPU results size: 82888
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Shared Memory GPU took [32m1494.464355ms[0m
+[34mInfo:: [0mEstimated total time: 0.0063293 hours (0.379758 minutes)
+[34mInfo:: [0mShared Memory GPU results size: 82888
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register + Shared Memory GPU took [32m1480.174683ms[0m
+[34mInfo:: [0mEstimated total time: 0.00626878 hours (0.376127 minutes)
+[34mInfo:: [0mCoarsened Register + Shared Memory GPU results size: 82888
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Register Tiling GPU took [32m1784.037231ms[0m
+[34mInfo:: [0mEstimated total time: 0.00755569 hours (0.453341 minutes)
+[34mInfo:: [0mRegister Tiling GPU results size: 82888
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling GPU took [32m1466.501831ms[0m
+[34mInfo:: [0mEstimated total time: 0.00621087 hours (0.372652 minutes)
+[34mInfo:: [0mCoarsened Register Tiling GPU results size: 82888
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling + Shared Guides GPU took [32m1449.046753ms[0m
+[34mInfo:: [0mEstimated total time: 0.00613695 hours (0.368217 minutes)
+[34mInfo:: [0mCoarsened Register Tiling + Shared Guides GPU results size: 82888
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling + Warp Queue + Shared Guides GPU took [32m1508.102661ms[0m
+[34mInfo:: [0mEstimated total time: 0.00638706 hours (0.383223 minutes)
+[34mInfo:: [0mCoarsened Register Tiling + Warp Queue + Shared Guides GPU results size: 82888
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0mtest_length: 2100000000
+[34mTIMER::[0m Naive GPU took [32m2180.081787ms[0m
+[34mInfo:: [0mEstimated total time: 0.00879333 hours (0.5276 minutes)
+[34mInfo:: [0mNaive GPU results size: 85449
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Shared + Constant Memory GPU took [32m1603.421143ms[0m
+[34mInfo:: [0mEstimated total time: 0.00646738 hours (0.388043 minutes)
+[34mInfo:: [0mShared Memory GPU results size: 85449
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Shared Memory GPU took [32m1568.955688ms[0m
+[34mInfo:: [0mEstimated total time: 0.00632836 hours (0.379702 minutes)
+[34mInfo:: [0mShared Memory GPU results size: 85449
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register + Shared Memory GPU took [32m1553.778198ms[0m
+[34mInfo:: [0mEstimated total time: 0.00626714 hours (0.376029 minutes)
+[34mInfo:: [0mCoarsened Register + Shared Memory GPU results size: 85449
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Register Tiling GPU took [32m1873.258789ms[0m
+[34mInfo:: [0mEstimated total time: 0.00755576 hours (0.453346 minutes)
+[34mInfo:: [0mRegister Tiling GPU results size: 85449
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling GPU took [32m1540.001831ms[0m
+[34mInfo:: [0mEstimated total time: 0.00621158 hours (0.372695 minutes)
+[34mInfo:: [0mCoarsened Register Tiling GPU results size: 85449
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling + Shared Guides GPU took [32m1521.260498ms[0m
+[34mInfo:: [0mEstimated total time: 0.00613598 hours (0.368159 minutes)
+[34mInfo:: [0mCoarsened Register Tiling + Shared Guides GPU results size: 85449
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling + Warp Queue + Shared Guides GPU took [32m1583.495483ms[0m
+[34mInfo:: [0mEstimated total time: 0.00638701 hours (0.38322 minutes)
+[34mInfo:: [0mCoarsened Register Tiling + Warp Queue + Shared Guides GPU results size: 85449
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0mtest_length: 2200000000
+[34mTIMER::[0m Naive GPU took [32m2284.125244ms[0m
+[34mInfo:: [0mEstimated total time: 0.00879422 hours (0.527653 minutes)
+[34mInfo:: [0mNaive GPU results size: 89760
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Shared + Constant Memory GPU took [32m1679.699951ms[0m
+[34mInfo:: [0mEstimated total time: 0.00646709 hours (0.388025 minutes)
+[34mInfo:: [0mShared Memory GPU results size: 89760
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Shared Memory GPU took [32m1643.728638ms[0m
+[34mInfo:: [0mEstimated total time: 0.0063286 hours (0.379716 minutes)
+[34mInfo:: [0mShared Memory GPU results size: 89760
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register + Shared Memory GPU took [32m1627.994019ms[0m
+[34mInfo:: [0mEstimated total time: 0.00626802 hours (0.376081 minutes)
+[34mInfo:: [0mCoarsened Register + Shared Memory GPU results size: 89760
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Register Tiling GPU took [32m1962.606567ms[0m
+[34mInfo:: [0mEstimated total time: 0.00755632 hours (0.453379 minutes)
+[34mInfo:: [0mRegister Tiling GPU results size: 89760
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling GPU took [32m1612.607910ms[0m
+[34mInfo:: [0mEstimated total time: 0.00620878 hours (0.372527 minutes)
+[34mInfo:: [0mCoarsened Register Tiling GPU results size: 89760
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling + Shared Guides GPU took [32m1593.596680ms[0m
+[34mInfo:: [0mEstimated total time: 0.00613558 hours (0.368135 minutes)
+[34mInfo:: [0mCoarsened Register Tiling + Shared Guides GPU results size: 89760
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling + Warp Queue + Shared Guides GPU took [32m1658.704102ms[0m
+[34mInfo:: [0mEstimated total time: 0.00638625 hours (0.383175 minutes)
+[34mInfo:: [0mCoarsened Register Tiling + Warp Queue + Shared Guides GPU results size: 89760
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0mtest_length: 2300000000
+[34mTIMER::[0m Naive GPU took [32m2388.475098ms[0m
+[34mInfo:: [0mEstimated total time: 0.00879615 hours (0.527769 minutes)
+[34mInfo:: [0mNaive GPU results size: 92762
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Shared + Constant Memory GPU took [32m1755.936157ms[0m
+[34mInfo:: [0mEstimated total time: 0.00646667 hours (0.388 minutes)
+[34mInfo:: [0mShared Memory GPU results size: 92762
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Shared Memory GPU took [32m1718.171631ms[0m
+[34mInfo:: [0mEstimated total time: 0.00632759 hours (0.379656 minutes)
+[34mInfo:: [0mShared Memory GPU results size: 92762
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register + Shared Memory GPU took [32m1701.749268ms[0m
+[34mInfo:: [0mEstimated total time: 0.00626711 hours (0.376027 minutes)
+[34mInfo:: [0mCoarsened Register + Shared Memory GPU results size: 92762
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Register Tiling GPU took [32m2051.666260ms[0m
+[34mInfo:: [0mEstimated total time: 0.00755577 hours (0.453346 minutes)
+[34mInfo:: [0mRegister Tiling GPU results size: 92762
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling GPU took [32m1687.072998ms[0m
+[34mInfo:: [0mEstimated total time: 0.00621307 hours (0.372784 minutes)
+[34mInfo:: [0mCoarsened Register Tiling GPU results size: 92762
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling + Shared Guides GPU took [32m1666.574097ms[0m
+[34mInfo:: [0mEstimated total time: 0.00613757 hours (0.368254 minutes)
+[34mInfo:: [0mCoarsened Register Tiling + Shared Guides GPU results size: 92762
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling + Warp Queue + Shared Guides GPU took [32m1736.285522ms[0m
+[34mInfo:: [0mEstimated total time: 0.0063943 hours (0.383658 minutes)
+[34mInfo:: [0mCoarsened Register Tiling + Warp Queue + Shared Guides GPU results size: 92762
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0mtest_length: 2400000000
+[34mTIMER::[0m Naive GPU took [32m2496.598633ms[0m
+[34mInfo:: [0mEstimated total time: 0.00881125 hours (0.528675 minutes)
+[34mInfo:: [0mNaive GPU results size: 96591
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Shared + Constant Memory GPU took [32m1835.755005ms[0m
+[34mInfo:: [0mEstimated total time: 0.00647893 hours (0.388736 minutes)
+[34mInfo:: [0mShared Memory GPU results size: 96591
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Shared Memory GPU took [32m1797.221436ms[0m
+[34mInfo:: [0mEstimated total time: 0.00634293 hours (0.380576 minutes)
+[34mInfo:: [0mShared Memory GPU results size: 96591
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register + Shared Memory GPU took [32m1780.764282ms[0m
+[34mInfo:: [0mEstimated total time: 0.00628485 hours (0.377091 minutes)
+[34mInfo:: [0mCoarsened Register + Shared Memory GPU results size: 96591
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Register Tiling GPU took [32m2146.299072ms[0m
+[34mInfo:: [0mEstimated total time: 0.00757493 hours (0.454496 minutes)
+[34mInfo:: [0mRegister Tiling GPU results size: 96591
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling GPU took [32m1764.552979ms[0m
+[34mInfo:: [0mEstimated total time: 0.00622764 hours (0.373658 minutes)
+[34mInfo:: [0mCoarsened Register Tiling GPU results size: 96591
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling + Shared Guides GPU took [32m1745.622314ms[0m
+[34mInfo:: [0mEstimated total time: 0.00616083 hours (0.36965 minutes)
+[34mInfo:: [0mCoarsened Register Tiling + Shared Guides GPU results size: 96591
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling + Warp Queue + Shared Guides GPU took [32m1813.902222ms[0m
+[34mInfo:: [0mEstimated total time: 0.00640181 hours (0.384108 minutes)
+[34mInfo:: [0mCoarsened Register Tiling + Warp Queue + Shared Guides GPU results size: 96591
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0mtest_length: 2500000000
+[34mTIMER::[0m Naive GPU took [32m2603.090820ms[0m
+[34mInfo:: [0mEstimated total time: 0.00881961 hours (0.529176 minutes)
+[34mInfo:: [0mNaive GPU results size: 100221
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Shared + Constant Memory GPU took [32m1915.267944ms[0m
+[34mInfo:: [0mEstimated total time: 0.00648917 hours (0.38935 minutes)
+[34mInfo:: [0mShared Memory GPU results size: 100221
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Shared Memory GPU took [32m1874.193237ms[0m
+[34mInfo:: [0mEstimated total time: 0.00635001 hours (0.381 minutes)
+[34mInfo:: [0mShared Memory GPU results size: 100221
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register + Shared Memory GPU took [32m1856.263428ms[0m
+[34mInfo:: [0mEstimated total time: 0.00628926 hours (0.377356 minutes)
+[34mInfo:: [0mCoarsened Register + Shared Memory GPU results size: 100221
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Register Tiling GPU took [32m2236.925293ms[0m
+[34mInfo:: [0mEstimated total time: 0.00757899 hours (0.454739 minutes)
+[34mInfo:: [0mRegister Tiling GPU results size: 100221
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling GPU took [32m1839.517700ms[0m
+[34mInfo:: [0mEstimated total time: 0.00623252 hours (0.373951 minutes)
+[34mInfo:: [0mCoarsened Register Tiling GPU results size: 100221
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling + Shared Guides GPU took [32m1817.794189ms[0m
+[34mInfo:: [0mEstimated total time: 0.00615892 hours (0.369535 minutes)
+[34mInfo:: [0mCoarsened Register Tiling + Shared Guides GPU results size: 100221
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling + Warp Queue + Shared Guides GPU took [32m1893.943481ms[0m
+[34mInfo:: [0mEstimated total time: 0.00641692 hours (0.385015 minutes)
+[34mInfo:: [0mCoarsened Register Tiling + Warp Queue + Shared Guides GPU results size: 100221
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0mtest_length: 2600000000
+[34mTIMER::[0m Naive GPU took [32m2706.402100ms[0m
+[34mInfo:: [0mEstimated total time: 0.00881696 hours (0.529018 minutes)
+[34mInfo:: [0mNaive GPU results size: 103429
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Shared + Constant Memory GPU took [32m1992.073853ms[0m
+[34mInfo:: [0mEstimated total time: 0.00648981 hours (0.389389 minutes)
+[34mInfo:: [0mShared Memory GPU results size: 103429
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Shared Memory GPU took [32m1949.901611ms[0m
+[34mInfo:: [0mEstimated total time: 0.00635242 hours (0.381145 minutes)
+[34mInfo:: [0mShared Memory GPU results size: 103429
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register + Shared Memory GPU took [32m1931.189819ms[0m
+[34mInfo:: [0mEstimated total time: 0.00629146 hours (0.377488 minutes)
+[34mInfo:: [0mCoarsened Register + Shared Memory GPU results size: 103429
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Register Tiling GPU took [32m2326.940674ms[0m
+[34mInfo:: [0mEstimated total time: 0.00758074 hours (0.454845 minutes)
+[34mInfo:: [0mRegister Tiling GPU results size: 103429
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling GPU took [32m1912.967773ms[0m
+[34mInfo:: [0mEstimated total time: 0.0062321 hours (0.373926 minutes)
+[34mInfo:: [0mCoarsened Register Tiling GPU results size: 103429
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling + Shared Guides GPU took [32m1890.278564ms[0m
+[34mInfo:: [0mEstimated total time: 0.00615818 hours (0.369491 minutes)
+[34mInfo:: [0mCoarsened Register Tiling + Shared Guides GPU results size: 103429
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling + Warp Queue + Shared Guides GPU took [32m1967.196289ms[0m
+[34mInfo:: [0mEstimated total time: 0.00640876 hours (0.384526 minutes)
+[34mInfo:: [0mCoarsened Register Tiling + Warp Queue + Shared Guides GPU results size: 103429
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0mtest_length: 2700000000
+[34mTIMER::[0m Naive GPU took [32m2813.259766ms[0m
+[34mInfo:: [0mEstimated total time: 0.00882564 hours (0.529538 minutes)
+[34mInfo:: [0mNaive GPU results size: 107032
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Shared + Constant Memory GPU took [32m2068.819824ms[0m
+[34mInfo:: [0mEstimated total time: 0.00649021 hours (0.389413 minutes)
+[34mInfo:: [0mShared Memory GPU results size: 107032
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Shared Memory GPU took [32m2026.898438ms[0m
+[34mInfo:: [0mEstimated total time: 0.0063587 hours (0.381522 minutes)
+[34mInfo:: [0mShared Memory GPU results size: 107032
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register + Shared Memory GPU took [32m2008.094360ms[0m
+[34mInfo:: [0mEstimated total time: 0.00629971 hours (0.377982 minutes)
+[34mInfo:: [0mCoarsened Register + Shared Memory GPU results size: 107032
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Register Tiling GPU took [32m2417.072510ms[0m
+[34mInfo:: [0mEstimated total time: 0.00758273 hours (0.454964 minutes)
+[34mInfo:: [0mRegister Tiling GPU results size: 107032
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling GPU took [32m1987.906372ms[0m
+[34mInfo:: [0mEstimated total time: 0.00623637 hours (0.374182 minutes)
+[34mInfo:: [0mCoarsened Register Tiling GPU results size: 107032
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling + Shared Guides GPU took [32m1963.722656ms[0m
+[34mInfo:: [0mEstimated total time: 0.00616051 hours (0.36963 minutes)
+[34mInfo:: [0mCoarsened Register Tiling + Shared Guides GPU results size: 107032
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling + Warp Queue + Shared Guides GPU took [32m2042.866577ms[0m
+[34mInfo:: [0mEstimated total time: 0.00640879 hours (0.384528 minutes)
+[34mInfo:: [0mCoarsened Register Tiling + Warp Queue + Shared Guides GPU results size: 107032
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0mtest_length: 2800000000
+[34mTIMER::[0m Naive GPU took [32m2917.213623ms[0m
+[34mInfo:: [0mEstimated total time: 0.00882491 hours (0.529494 minutes)
+[34mInfo:: [0mNaive GPU results size: 112175
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Shared + Constant Memory GPU took [32m2146.110107ms[0m
+[34mInfo:: [0mEstimated total time: 0.00649223 hours (0.389534 minutes)
+[34mInfo:: [0mShared Memory GPU results size: 112175
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Shared Memory GPU took [32m2100.494141ms[0m
+[34mInfo:: [0mEstimated total time: 0.00635424 hours (0.381254 minutes)
+[34mInfo:: [0mShared Memory GPU results size: 112175
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register + Shared Memory GPU took [32m2080.310791ms[0m
+[34mInfo:: [0mEstimated total time: 0.00629318 hours (0.377591 minutes)
+[34mInfo:: [0mCoarsened Register + Shared Memory GPU results size: 112172
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Register Tiling GPU took [32m2508.880615ms[0m
+[34mInfo:: [0mEstimated total time: 0.00758965 hours (0.455379 minutes)
+[34mInfo:: [0mRegister Tiling GPU results size: 112175
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling GPU took [32m2061.161377ms[0m
+[34mInfo:: [0mEstimated total time: 0.00623525 hours (0.374115 minutes)
+[34mInfo:: [0mCoarsened Register Tiling GPU results size: 112175
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling + Shared Guides GPU took [32m2036.323364ms[0m
+[34mInfo:: [0mEstimated total time: 0.00616011 hours (0.369607 minutes)
+[34mInfo:: [0mCoarsened Register Tiling + Shared Guides GPU results size: 112175
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling + Warp Queue + Shared Guides GPU took [32m2120.002930ms[0m
+[34mInfo:: [0mEstimated total time: 0.00641325 hours (0.384795 minutes)
+[34mInfo:: [0mCoarsened Register Tiling + Warp Queue + Shared Guides GPU results size: 112175
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0mtest_length: 2900000000
+[34mTIMER::[0m Naive GPU took [32m3022.184814ms[0m
+[34mInfo:: [0mEstimated total time: 0.0088272 hours (0.529632 minutes)
+[34mInfo:: [0mNaive GPU results size: 117613
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Shared + Constant Memory GPU took [32m2223.335205ms[0m
+[34mInfo:: [0mEstimated total time: 0.00649392 hours (0.389635 minutes)
+[34mInfo:: [0mShared Memory GPU results size: 117613
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Shared Memory GPU took [32m2175.989014ms[0m
+[34mInfo:: [0mEstimated total time: 0.00635563 hours (0.381338 minutes)
+[34mInfo:: [0mShared Memory GPU results size: 117613
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register + Shared Memory GPU took [32m2155.459961ms[0m
+[34mInfo:: [0mEstimated total time: 0.00629567 hours (0.37774 minutes)
+[34mInfo:: [0mCoarsened Register + Shared Memory GPU results size: 117613
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Register Tiling GPU took [32m2597.347168ms[0m
+[34mInfo:: [0mEstimated total time: 0.00758633 hours (0.45518 minutes)
+[34mInfo:: [0mRegister Tiling GPU results size: 117613
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling GPU took [32m2135.105225ms[0m
+[34mInfo:: [0mEstimated total time: 0.00623622 hours (0.374173 minutes)
+[34mInfo:: [0mCoarsened Register Tiling GPU results size: 117613
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling + Shared Guides GPU took [32m2110.332275ms[0m
+[34mInfo:: [0mEstimated total time: 0.00616386 hours (0.369832 minutes)
+[34mInfo:: [0mCoarsened Register Tiling + Shared Guides GPU results size: 117613
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling + Warp Queue + Shared Guides GPU took [32m2195.554688ms[0m
+[34mInfo:: [0mEstimated total time: 0.00641278 hours (0.384767 minutes)
+[34mInfo:: [0mCoarsened Register Tiling + Warp Queue + Shared Guides GPU results size: 117613
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0mtest_length: 3000000000
+[34mTIMER::[0m Naive GPU took [32m3114.356201ms[0m
+[34mInfo:: [0mEstimated total time: 0.0087932 hours (0.527592 minutes)
+[34mInfo:: [0mNaive GPU results size: 120565
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Shared + Constant Memory GPU took [32m2323.515137ms[0m
+[34mInfo:: [0mEstimated total time: 0.00656031 hours (0.393618 minutes)
+[34mInfo:: [0mShared Memory GPU results size: 120565
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Shared Memory GPU took [32m2241.400146ms[0m
+[34mInfo:: [0mEstimated total time: 0.00632846 hours (0.379708 minutes)
+[34mInfo:: [0mShared Memory GPU results size: 120565
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register + Shared Memory GPU took [32m2216.695801ms[0m
+[34mInfo:: [0mEstimated total time: 0.00625871 hours (0.375523 minutes)
+[34mInfo:: [0mCoarsened Register + Shared Memory GPU results size: 120572
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Register Tiling GPU took [32m2674.572266ms[0m
+[34mInfo:: [0mEstimated total time: 0.0075515 hours (0.45309 minutes)
+[34mInfo:: [0mRegister Tiling GPU results size: 120565
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling GPU took [32m2197.428467ms[0m
+[34mInfo:: [0mEstimated total time: 0.00620431 hours (0.372259 minutes)
+[34mInfo:: [0mCoarsened Register Tiling GPU results size: 120565
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling + Shared Guides GPU took [32m2170.416748ms[0m
+[34mInfo:: [0mEstimated total time: 0.00612804 hours (0.367683 minutes)
+[34mInfo:: [0mCoarsened Register Tiling + Shared Guides GPU results size: 120565
+[34mInfo:: [0mResults were not equal, sad D:
+[34mTIMER::[0m Coarsened Register Tiling + Warp Queue + Shared Guides GPU took [32m2259.183105ms[0m
+[34mInfo:: [0mEstimated total time: 0.00637867 hours (0.38272 minutes)
+[34mInfo:: [0mCoarsened Register Tiling + Warp Queue + Shared Guides GPU results size: 120565
+[34mInfo:: [0mResults were not equal, sad D:
+[32m✱ The build folder has been uploaded to http://s3.amazonaws.com/files.rai-project.com/userdata/build-5ccd652fee4c0728fa7cbdcd.tar.gz. The data will be present for only a short duration of time.[0m
+[32m✱ Server has ended your request.[0m
