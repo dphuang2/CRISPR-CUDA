@@ -401,7 +401,7 @@ __global__ void coarsened_register_tiling_shared_guides_wq_gpu_kernel(
     int64_t i;
     int mismatches;
     int n, j, k, next_idx;
-    int warpIdx = threadIdx.x % WARP_SIZE;
+    int warpIdx = threadIdx.x / WARP_SIZE;
     int queueIdx;
     char rc[GUIDE_SIZE + COARSE_REG];
 
@@ -478,11 +478,10 @@ __global__ void coarsened_register_tiling_shared_guides_wq_gpu_kernel(
       // warp queue -> block queue data transfer
       int warpThreadIdx = threadIdx.x % WARP_SIZE;
       int blockQueueIdx, warpQueueIdx;
-      queueIdx = warpThreadIdx * WQ_ELEM_PER_THREAD;
-      for (i = 0; i < WQ_ELEM_PER_THREAD; i++) {
-          if (queueIdx + i < warpQueueSize[warpIdx]) {
-              blockQueueIdx = 2 * (blockQueueOffset[warpIdx] + queueIdx + i);
-              warpQueueIdx = 2 * (queueIdx + i);
+      for (i = warpThreadIdx; i < WQ_CAPACITY; i += WQ_ELEM_PER_THREAD) {
+          if (i < warpQueueSize[warpIdx]) {
+              blockQueueIdx = 2 * (blockQueueOffset[warpIdx] + i);
+              warpQueueIdx = 2 * i;
               
               blockQueue[blockQueueIdx] = warpQueue[warpIdx][warpQueueIdx];
               blockQueue[blockQueueIdx + 1] = warpQueue[warpIdx][warpQueueIdx + 1];
@@ -844,137 +843,138 @@ int main(int argc, char ** argv) {
     int64_t * hostResults = (int64_t *) malloc(sizeOfResults);
     int hostNumResults;
 
-    // For testing smaller lengths
-    /*int64_t genome_length_test = 100000;*/
-    int64_t genome_length_test = genome_length;
+    uint64_t step = 1000000;
+    uint64_t genome_length_test = step;
 
-    /*
-     *timer_start("Naive CPU");
-     *results_truth = naive_cpu_guide_matching(genome, genome_length_test, guides, num_guides);
-     *msec = timer_stop();
-     *estimate_total_time(msec, genome_length, genome_length_test);
-     *PRINT("Ground truth results size: {}", results_truth.size());
-     */
-
-    timer_start("Naive GPU");
-    gpu_guide_matching(
-            genome,
-            genome_length_test,
-            guides,
-            num_guides,
-            hostResults,
-            &hostNumResults,
-            sizeOfResults,
-            naive);
+    timer_start("Naive CPU");
+    results_truth = naive_cpu_guide_matching(genome, genome_length_test, guides, num_guides);
     msec = timer_stop();
     estimate_total_time(msec, genome_length, genome_length_test);
-    PRINT("Naive GPU results size: {}", hostNumResults);
-    assert_results_equal(results_truth, hostResults, hostNumResults);
+    PRINT("Ground truth results size: {}", results_truth.size());
 
-    timer_start("Shared + Constant Memory GPU");
-    gpu_guide_matching(
-            genome,
-            genome_length_test,
-            guides,
-            num_guides,
-            hostResults,
-            &hostNumResults,
-            sizeOfResults,
-            s_c_memory);
-    msec = timer_stop();
-    estimate_total_time(msec, genome_length, genome_length_test);
-    PRINT("Shared Memory GPU results size: {}", hostNumResults);
-    assert_results_equal(results_truth, hostResults, hostNumResults);
+    for (genome_length_test = genome_length; genome_length_test <= genome_length; genome_length_test += step) {
+        PRINT("Testing: {}", genome_length_test);
+        timer_start("Naive GPU");
+        gpu_guide_matching(
+                genome,
+                genome_length_test,
+                guides,
+                num_guides,
+                hostResults,
+                &hostNumResults,
+                sizeOfResults,
+                naive);
+        msec = timer_stop();
+        estimate_total_time(msec, genome_length, genome_length_test);
+        PRINT("Naive GPU results size: {}", hostNumResults);
+        assert_results_equal(results_truth, hostResults, hostNumResults);
 
-    timer_start("Shared Memory GPU");
-    gpu_guide_matching(
-            genome,
-            genome_length_test,
-            guides,
-            num_guides,
-            hostResults,
-            &hostNumResults,
-            sizeOfResults,
-            s_memory);
-    msec = timer_stop();
-    estimate_total_time(msec, genome_length, genome_length_test);
-    PRINT("Shared Memory GPU results size: {}", hostNumResults);
-    assert_results_equal(results_truth, hostResults, hostNumResults);
+        timer_start("Shared + Constant Memory GPU");
+        gpu_guide_matching(
+                genome,
+                genome_length_test,
+                guides,
+                num_guides,
+                hostResults,
+                &hostNumResults,
+                sizeOfResults,
+                s_c_memory);
+        msec = timer_stop();
+        estimate_total_time(msec, genome_length, genome_length_test);
+        PRINT("Shared Memory GPU results size: {}", hostNumResults);
+        assert_results_equal(results_truth, hostResults, hostNumResults);
 
-    timer_start("Coarsened Register + Shared Memory GPU");
-    gpu_guide_matching(
-            genome,
-            genome_length_test,
-            guides,
-            num_guides,
-            hostResults,
-            &hostNumResults,
-            sizeOfResults,
-            coarsened_s_r_memory);
-    msec = timer_stop();
-    estimate_total_time(msec, genome_length, genome_length_test);
-    PRINT("Coarsened Register + Shared Memory GPU results size: {}", hostNumResults);
-    assert_results_equal(results_truth, hostResults, hostNumResults);
+        timer_start("Shared Memory GPU");
+        gpu_guide_matching(
+                genome,
+                genome_length_test,
+                guides,
+                num_guides,
+                hostResults,
+                &hostNumResults,
+                sizeOfResults,
+                s_memory);
+        msec = timer_stop();
+        estimate_total_time(msec, genome_length, genome_length_test);
+        PRINT("Shared Memory GPU results size: {}", hostNumResults);
+        assert_results_equal(results_truth, hostResults, hostNumResults);
 
-    timer_start("Register Tiling GPU");
-    gpu_guide_matching(
-            genome,
-            genome_length_test,
-            guides,
-            num_guides,
-            hostResults,
-            &hostNumResults,
-            sizeOfResults,
-            register_tiling);
-    msec = timer_stop();
-    estimate_total_time(msec, genome_length, genome_length_test);
-    PRINT("Register Tiling GPU results size: {}", hostNumResults);
-    assert_results_equal(results_truth, hostResults, hostNumResults);
+        timer_start("Coarsened Register + Shared Memory GPU");
+        gpu_guide_matching(
+                genome,
+                genome_length_test,
+                guides,
+                num_guides,
+                hostResults,
+                &hostNumResults,
+                sizeOfResults,
+                coarsened_s_r_memory);
+        msec = timer_stop();
+        estimate_total_time(msec, genome_length, genome_length_test);
+        PRINT("Coarsened Register + Shared Memory GPU results size: {}", hostNumResults);
+        assert_results_equal(results_truth, hostResults, hostNumResults);
 
-    timer_start("Coarsened Register Tiling GPU");
-    gpu_guide_matching(
-            genome,
-            genome_length_test,
-            guides,
-            num_guides,
-            hostResults,
-            &hostNumResults,
-            sizeOfResults,
-            coarsened_register_tiling);
-    msec = timer_stop();
-    estimate_total_time(msec, genome_length, genome_length_test);
-    PRINT("Coarsened Register Tiling GPU results size: {}", hostNumResults);
-    assert_results_equal(results_truth, hostResults, hostNumResults);
+        timer_start("Register Tiling GPU");
+        gpu_guide_matching(
+                genome,
+                genome_length_test,
+                guides,
+                num_guides,
+                hostResults,
+                &hostNumResults,
+                sizeOfResults,
+                register_tiling);
+        msec = timer_stop();
+        estimate_total_time(msec, genome_length, genome_length_test);
+        PRINT("Register Tiling GPU results size: {}", hostNumResults);
+        assert_results_equal(results_truth, hostResults, hostNumResults);
 
-    timer_start("Coarsened Register Tiling + Shared Guides GPU");
-    gpu_guide_matching(
-            genome,
-            genome_length_test,
-            guides,
-            num_guides,
-            hostResults,
-            &hostNumResults,
-            sizeOfResults,
-            coarsened_register_tiling_s_g);
-    msec = timer_stop();
-    estimate_total_time(msec, genome_length, genome_length_test);
-    PRINT("Coarsened Register Tiling + Shared Guides GPU results size: {}", hostNumResults);
-    assert_results_equal(results_truth, hostResults, hostNumResults);
+        timer_start("Coarsened Register Tiling GPU");
+        gpu_guide_matching(
+                genome,
+                genome_length_test,
+                guides,
+                num_guides,
+                hostResults,
+                &hostNumResults,
+                sizeOfResults,
+                coarsened_register_tiling);
+        msec = timer_stop();
+        estimate_total_time(msec, genome_length, genome_length_test);
+        PRINT("Coarsened Register Tiling GPU results size: {}", hostNumResults);
+        assert_results_equal(results_truth, hostResults, hostNumResults);
 
-    timer_start("Coarsened Register Tiling + Warp Queue + Shared Guides GPU");
-    gpu_guide_matching(
-            genome,
-            genome_length_test,
-            guides,
-            num_guides,
-            hostResults,
-            &hostNumResults,
-            sizeOfResults,
-            coarsened_register_tiling_s_g_wq);
-    msec = timer_stop();
-    estimate_total_time(msec, genome_length, genome_length_test);
-    PRINT("Coarsened Register Tiling + Warp Queue + Shared Guides GPU results size: {}", hostNumResults);
-    assert_results_equal(results_truth, hostResults, hostNumResults);
+        timer_start("Coarsened Register Tiling + Shared Guides GPU");
+        gpu_guide_matching(
+                genome,
+                genome_length_test,
+                guides,
+                num_guides,
+                hostResults,
+                &hostNumResults,
+                sizeOfResults,
+                coarsened_register_tiling_s_g);
+        msec = timer_stop();
+        estimate_total_time(msec, genome_length, genome_length_test);
+        PRINT("Coarsened Register Tiling + Shared Guides GPU results size: {}", hostNumResults);
+        assert_results_equal(results_truth, hostResults, hostNumResults);
+
+        timer_start("Coarsened Register Tiling + Warp Queue + Shared Guides GPU");
+        gpu_guide_matching(
+                genome,
+                genome_length_test,
+                guides,
+                num_guides,
+                hostResults,
+                &hostNumResults,
+                sizeOfResults,
+                coarsened_register_tiling_s_g_wq);
+        msec = timer_stop();
+        estimate_total_time(msec, genome_length, genome_length_test);
+        PRINT("Coarsened Register Tiling + Warp Queue + Shared Guides GPU results size: {}", hostNumResults);
+        assert_results_equal(results_truth, hostResults, hostNumResults);
+    }
+
 
     /*
      *Free up any dynamic memory

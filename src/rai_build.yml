@@ -11,4 +11,5 @@ commands:
     - cp -r /src .
     - cmake /src
     - make
-    - ./crispr-cuda
+    #-  nvprof -f --analysis-metrics -o timeline.nvvp ./crispr-cuda
+    -  ./crispr-cuda

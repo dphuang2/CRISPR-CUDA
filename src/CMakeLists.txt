@@ -49,6 +49,8 @@ include_directories(crispr-cuda
   ${CUDA_INCLUDE_DIRS}
 )
 
+set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -O3 -lineinfo -g -use_fast_math")
+
 if(APPLE)
   # We need to add the default path to the driver (libcuda.dylib) as an rpath,
   # so that the static cuda runtime can find it at runtime.
