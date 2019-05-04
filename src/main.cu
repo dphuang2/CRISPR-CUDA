@@ -843,8 +843,7 @@ int main(int argc, char ** argv) {
     int64_t * hostResults = (int64_t *) malloc(sizeOfResults);
     int hostNumResults;
 
-    uint64_t step = 1000000;
-    uint64_t genome_length_test = step;
+    uint64_t genome_length_test = 1000000;
 
     timer_start("Naive CPU");
     results_truth = naive_cpu_guide_matching(genome, genome_length_test, guides, num_guides);
@@ -852,8 +851,9 @@ int main(int argc, char ** argv) {
     estimate_total_time(msec, genome_length, genome_length_test);
     PRINT("Ground truth results size: {}", results_truth.size());
 
-    for (genome_length_test = genome_length; genome_length_test <= genome_length; genome_length_test += step) {
-        PRINT("Testing: {}", genome_length_test);
+    uint64_t step = 100000000;
+    for (genome_length_test = step; genome_length_test <= genome_length; genome_length_test += step) {
+        PRINT("test_length: {}", genome_length_test);
         timer_start("Naive GPU");
         gpu_guide_matching(
                 genome,
