@@ -24,6 +24,7 @@ using namespace std;
  *ifstream.getline
  */
 #define GUIDE_BUFFER_SIZE (GUIDE_SIZE + 1)
+#define SIZE_OF_GUIDES 966 // NUM_GUIDES * GUIDE_BUFFER_SIZE
 /*
  *This is the common edit distance standard for the sgRNA guide
  */
@@ -34,10 +35,26 @@ using namespace std;
  */
 #define MATCHES_PER_GUIDE 8000
 
-#define TILE_WIDTH 512
-#define COARSE_FAC 40
-#define COARSENED_TILE_WIDTH (TILE_WIDTH * COARSE_FAC)
-#define CONSTANT_MEMORY_SIZE (NUM_GUIDES * GUIDE_BUFFER_SIZE)
+#define MAX_SHARED_MEMORY 49152
+#define TILE_WIDTH 1024
+#define COARSE_REG 64
+#define COARSE_SHARED 32
+
+/*
+ *For warp queue
+ */
+#define WARP_SIZE 32
+#define NUM_WARPS (TILE_WIDTH / WARP_SIZE)
+
+// Maximum number of elements that can be inserted into a block queue
+#define BQ_CAPACITY 2048
+
+#define NUM_ELEM_PER_THREAD BQ_CAPACITY / BLOCK_SIZE
+
+// Maximum number of elements that can be inserted into a warp queue
+#define WQ_CAPACITY 1024
+#define WQ_ELEM_PER_THREAD (WQ_CAPACITY / WARP_SIZE)
+
 
 #define CUDA_CHECK(stmt) checkCuda(stmt, __FILE__, __LINE__);
 void checkCuda(cudaError_t result, const char *file, const int line) {
@@ -47,12 +64,13 @@ void checkCuda(cudaError_t result, const char *file, const int line) {
     }
 }
 
-typedef set<tuple<int, uint64_t> > results_t;
+typedef set<tuple<int, int64_t> > results_t;
 
 /***************************************************************
   I/O HELPER FUNCTIONS
 ***************************************************************/
-char * read_genome(string filename, uint64_t * genome_length) {
+
+char * read_genome(string filename, int64_t * genome_length) {
     /*
      * ios::binary means to read file as is
      * ios::ate means start file pointer at the end so we can get file size
@@ -68,7 +86,7 @@ char * read_genome(string filename, uint64_t * genome_length) {
     file.seekg(0, ios::beg);
     *genome_length = size;
 
-    char * buffer = new char [size];
+    char * buffer = (char * ) malloc(size);
     if (file.read(buffer, size)) {
         return buffer;
     }
@@ -104,7 +122,7 @@ char * read_guides(string filename, int * num_guides) {
     return guides;
 }
 
-void assert_results_equal(results_t cpuResults, uint64_t * gpuResults, int gpuNumResults) {
+void assert_results_equal(results_t cpuResults, int64_t * gpuResults, int gpuNumResults) {
     /*
      *For comparing the gpu results and the cpuResults
      */
@@ -118,8 +136,8 @@ void assert_results_equal(results_t cpuResults, uint64_t * gpuResults, int gpuNu
     for (int i = 0; i < gpuNumResults; i++) {
         int gpuResultsIdx = i * 2;
         int guideIdx = (int) gpuResults[gpuResultsIdx];
-        uint64_t genomeIdx = gpuResults[gpuResultsIdx + 1];
-        tuple<int, uint64_t> match = make_tuple(guideIdx, genomeIdx);
+        int64_t genomeIdx = gpuResults[gpuResultsIdx + 1];
+        tuple<int, int64_t> match = make_tuple(guideIdx, genomeIdx);
         if (!cpuResults.count(match) || seen.count(match)) {
             PRINT("{}", failMessage);
             return;
@@ -130,7 +148,7 @@ void assert_results_equal(results_t cpuResults, uint64_t * gpuResults, int gpuNu
     PRINT("{}", successMessage);
 }
 
-void estimate_total_time(float msec, uint64_t genome_length, uint64_t genome_length_test) {
+void estimate_total_time(float msec, int64_t genome_length, int64_t genome_length_test) {
     float multiplier = float(genome_length) / genome_length_test;
     msec *= multiplier;
     float sec = msec / 100; // milliseconds to seconds
@@ -144,11 +162,11 @@ void estimate_total_time(float msec, uint64_t genome_length, uint64_t genome_len
   NAIVE CPU IMPLEMENTATION
 ***************************************************************/
 
-results_t naive_cpu_guide_matching(char * genome, uint64_t genome_length, char * guides, int num_guides) {
+results_t naive_cpu_guide_matching(char * genome, int64_t genome_length, char * guides, int num_guides) {
     results_t results;
     char * guide;
     int mismatches;
-    uint64_t i;
+    int64_t i;
     int j, k;
 
     for (i = 0; i < genome_length; i++) {
@@ -167,23 +185,41 @@ results_t naive_cpu_guide_matching(char * genome, uint64_t genome_length, char *
 }
 
 /***************************************************************
+  GPU HELPER FUNCTIONS
+***************************************************************/
+
+__device__ void insert_into_queue(
+        int64_t * queue,
+        int64_t capacity,
+        int * counter,
+        int guide_idx,
+        int64_t sequence_idx
+        )
+{
+    int results_idx = atomicAdd(counter, 1);
+    if (results_idx < capacity) {
+        int queue_idx = results_idx * 2;
+        queue[queue_idx] = (int64_t) guide_idx;
+        queue[queue_idx + 1] = sequence_idx;
+    }
+}
+
+/***************************************************************
   NAIVE GPU IMPLEMENTATION
 ***************************************************************/
 
 __global__ void naive_gpu_kernel(
         char * genome,
-        uint64_t genome_length,
+        int64_t genome_length,
         char * guides,
         int num_guides,
-        uint64_t * results,
+        int64_t * results,
         int * numResults,
-        uint64_t sizeOfResults)
+        int64_t sizeOfResults)
 {
-    uint64_t tid = blockDim.x * blockIdx.x + threadIdx.x;
-    int numResultsLocal;
-    int resultsIdx;
+    int64_t tid = blockDim.x * blockIdx.x + threadIdx.x;
     char * guide;
-    uint64_t i;
+    int64_t i;
     int mismatches;
     int j, k;
 
@@ -196,12 +232,7 @@ __global__ void naive_gpu_kernel(
                 mismatches += genome[i + k] != guide[k];
 
             if (mismatches <= EDIT_DISTANCE_THRESHOLD) {
-                numResultsLocal = atomicAdd(numResults, 1);
-                if (numResultsLocal < sizeOfResults) {
-                    resultsIdx = numResultsLocal * 2;
-                    results[resultsIdx] = (uint64_t) j;
-                    results[resultsIdx + 1] = i;
-                }
+                insert_into_queue(results, sizeOfResults, numResults, j, i);
             }
         }
     }
@@ -209,9 +240,9 @@ __global__ void naive_gpu_kernel(
 
 /***************************************************************
   GPU-AWARE IMPLEMENTATION
-  
+
   Possible optimizations:
-  - Constant memory for the guides 
+  - Constant memory for the guides
   - Shared memory for the genome
   - Warp-queue like structure for the results to avoid atomic operation
   - Striding for data coalescing (each thread processes a portion of the genome)
@@ -220,58 +251,196 @@ __global__ void naive_gpu_kernel(
 ***************************************************************/
 
 /***************************************************************
-  SHARED MEMORY GPU IMPLEMENTATION
+  REGISTER TILING GPU IMPLEMENTATION
 ***************************************************************/
 
-__global__ void shared_memory_gpu_kernel(
+__global__ void register_tiling_gpu_kernel(
         char * genome,
-        uint64_t genome_length,
+        int64_t genome_length,
         char * guides,
         int num_guides,
-        uint64_t * results,
+        int64_t * results,
         int * numResults,
-        uint64_t sizeOfResults)
+        int64_t sizeOfResults)
 {
-    uint64_t tx = threadIdx.x;
-    uint64_t tid = blockDim.x * blockIdx.x + tx;
-    int numResultsLocal;
-    int resultsIdx;
+    int64_t tid = blockDim.x * blockIdx.x + threadIdx.x;
     char * guide;
-    uint64_t i, b_start;
+    int64_t i;
     int mismatches;
-    int j, k, t_start;
-
-    __shared__ char shared_genome[TILE_WIDTH * 2];
+    int j, k;
+    char rc[GUIDE_SIZE];
 
     for (i = tid; i < genome_length - GUIDE_SIZE - 1; i += gridDim.x * blockDim.x) {
-
-        b_start = (i / blockDim.x) * blockDim.x;
-        t_start = 2 * tx;
-
-        if (b_start + t_start < genome_length)
-            shared_genome[t_start] = genome[b_start + t_start];
-        if (b_start + t_start + 1 < genome_length)
-            shared_genome[t_start + 1] = genome[b_start + t_start + 1];
-        __syncthreads();
+        for (j = 0; j < GUIDE_SIZE; j++)
+            rc[j] = genome[i + j];
 
         for (j = 0; j < num_guides; j++) {
             guide = guides + (j * GUIDE_BUFFER_SIZE);
 
             mismatches = 0;
             for (k = 0; k < GUIDE_SIZE; k++)
-                mismatches += shared_genome[tx + k] != guide[k];
+                mismatches += rc[k] != guide[k];
 
             if (mismatches <= EDIT_DISTANCE_THRESHOLD) {
-                numResultsLocal = atomicAdd(numResults, 1);
-                if (numResultsLocal < sizeOfResults) {
-                    resultsIdx = numResultsLocal * 2;
-                    results[resultsIdx] = (uint64_t) j;
-                    results[resultsIdx + 1] = i;
+                insert_into_queue(results, sizeOfResults, numResults, j, i);
+            }
+        }
+    }
+}
+
+/***************************************************************
+  COARSENED REGISTER TILING GPU IMPLEMENTATION
+***************************************************************/
+
+__global__ void coarsened_register_tiling_gpu_kernel(
+        char * genome,
+        int64_t genome_length,
+        char * guides,
+        int num_guides,
+        int64_t * results,
+        int * numResults,
+        int64_t sizeOfResults)
+{
+    int64_t tid = blockDim.x * blockIdx.x + threadIdx.x;
+    char * guide;
+    int64_t i;
+    int mismatches;
+    int n, j, k;
+    char rc[GUIDE_SIZE + COARSE_REG];
+
+    for (i = COARSE_REG * tid; i < genome_length - GUIDE_SIZE - 1 - COARSE_REG;
+            i += COARSE_REG * gridDim.x * blockDim.x) {
+
+        for (j = 0; j < GUIDE_SIZE + COARSE_REG; j++)
+            rc[j] = genome[i + j];
+
+        for (n = 0; n < COARSE_REG; n++) {
+            for (j = 0; j < num_guides; j++) {
+                guide = guides + (j * GUIDE_BUFFER_SIZE);
+
+                mismatches = 0;
+                for (k = 0; k < GUIDE_SIZE; k++)
+                    mismatches += rc[k + n] != guide[k];
+
+                if (mismatches <= EDIT_DISTANCE_THRESHOLD) {
+                    insert_into_queue(results, sizeOfResults, numResults, j, i + n);
                 }
             }
         }
+    }
+}
 
-        __syncthreads();
+/***************************************************************
+  COARSENED REGISTER TILING + SHARED MEMORY GUIDES GPU IMPLEMENTATION
+***************************************************************/
+
+__global__ void coarsened_register_tiling_shared_guides_gpu_kernel(
+        char * genome,
+        int64_t genome_length,
+        char * guides,
+        int num_guides,
+        int64_t * results,
+        int * numResults,
+        int64_t sizeOfResults)
+{
+    int64_t tx = threadIdx.x;
+    int64_t tid = blockDim.x * blockIdx.x + tx;
+    char * guide;
+    int64_t i;
+    int mismatches;
+    int n, j, k, next_idx;
+    char rc[GUIDE_SIZE + COARSE_REG];
+
+    __shared__ char shared_guides[SIZE_OF_GUIDES];
+    if (tx < SIZE_OF_GUIDES)
+        shared_guides[tx] = guides[tx]; 
+    next_idx = tx + TILE_WIDTH;
+    if (next_idx < SIZE_OF_GUIDES)
+        shared_guides[next_idx] = guides[next_idx]; 
+
+    __syncthreads();
+
+    for (i = COARSE_REG * tid; i < genome_length - GUIDE_SIZE - 1 - COARSE_REG;
+            i += COARSE_REG * gridDim.x * blockDim.x) {
+
+        for (j = 0; j < GUIDE_SIZE + COARSE_REG; j++)
+            rc[j] = genome[i + j];
+
+        for (n = 0; n < COARSE_REG; n++) {
+            for (j = 0; j < num_guides; j++) {
+                guide = shared_guides + (j * GUIDE_BUFFER_SIZE);
+
+                mismatches = 0;
+                for (k = 0; k < GUIDE_SIZE; k++)
+                    mismatches += rc[k + n] != guide[k];
+
+                if (mismatches <= EDIT_DISTANCE_THRESHOLD) {
+                    insert_into_queue(results, sizeOfResults, numResults, j, i + n);
+                }
+            }
+        }
+    }
+}
+
+/***************************************************************
+  COARSENED REGISTER TILING + WARP QUEUE + SHARED MEMORY GUIDES GPU IMPLEMENTATION
+***************************************************************/
+
+__global__ void coarsened_register_tiling_shared_guides_wq_gpu_kernel(
+        char * genome,
+        int64_t genome_length,
+        char * guides,
+        int num_guides,
+        int64_t * results,
+        int * numResults,
+        int64_t sizeOfResults)
+{
+    int64_t tx = threadIdx.x;
+    int64_t tid = blockDim.x * blockIdx.x + tx;
+    char * guide;
+    int64_t i;
+    int mismatches;
+    int n, j, k, next_idx;
+    char rc[GUIDE_SIZE + COARSE_REG];
+
+    __shared__ char shared_guides[SIZE_OF_GUIDES];
+
+    __shared__ unsigned int blockQueue[BQ_CAPACITY];
+    __shared__ unsigned int warpQueue[WQ_CAPACITY][NUM_WARPS];
+
+    __shared__ unsigned int blockQueueSize[1];
+    __shared__ unsigned int warpQueueSize[NUM_WARPS];
+    __shared__ unsigned int blockQueueOffset[NUM_WARPS];
+    __shared__ unsigned int globalQueueOffset[1];
+
+
+    if (tx < SIZE_OF_GUIDES)
+        shared_guides[tx] = guides[tx]; 
+    next_idx = tx + TILE_WIDTH;
+    if (next_idx < SIZE_OF_GUIDES)
+        shared_guides[next_idx] = guides[next_idx]; 
+
+    __syncthreads();
+
+    for (i = COARSE_REG * tid; i < genome_length - GUIDE_SIZE - 1 - COARSE_REG;
+            i += COARSE_REG * gridDim.x * blockDim.x) {
+
+        for (j = 0; j < GUIDE_SIZE + COARSE_REG; j++)
+            rc[j] = genome[i + j];
+
+        for (n = 0; n < COARSE_REG; n++) {
+            for (j = 0; j < num_guides; j++) {
+                guide = shared_guides + (j * GUIDE_BUFFER_SIZE);
+
+                mismatches = 0;
+                for (k = 0; k < GUIDE_SIZE; k++)
+                    mismatches += rc[k + n] != guide[k];
+
+                if (mismatches <= EDIT_DISTANCE_THRESHOLD) {
+                    insert_into_queue(results, sizeOfResults, numResults, j, i + n);
+                }
+            }
+        }
     }
 }
 
@@ -279,36 +448,33 @@ __global__ void shared_memory_gpu_kernel(
   SHARED MEMORY & CONSTANT MEMORY GPU IMPLEMENTATION
 ***************************************************************/
 
-__constant__ char constant_guides[CONSTANT_MEMORY_SIZE];
+__constant__ char constant_guides[SIZE_OF_GUIDES];
 __global__ void shared_constant_memory_gpu_kernel(
         char * genome,
-        uint64_t genome_length,
-        char * guides,
+        int64_t genome_length,
         int num_guides,
-        uint64_t * results,
+        int64_t * results,
         int * numResults,
-        uint64_t sizeOfResults)
+        int64_t sizeOfResults)
 {
-    uint64_t tx = threadIdx.x;
-    uint64_t tid = blockDim.x * blockIdx.x + tx;
-    int numResultsLocal;
-    int resultsIdx;
+    int64_t tx = threadIdx.x;
+    int64_t tid = blockDim.x * blockIdx.x + tx;
     char * guide;
-    uint64_t i, b_start;
+    int64_t i, b_start;
     int mismatches;
-    int j, k, t_start;
+    int j, k;
 
     __shared__ char shared_genome[TILE_WIDTH * 2];
 
-    for (i = tid; i < genome_length - GUIDE_SIZE - 1; i += gridDim.x * blockDim.x) {
+    for (i = tid; i < genome_length - GUIDE_SIZE - 1;
+            i += gridDim.x * blockDim.x) {
 
         b_start = (i / blockDim.x) * blockDim.x;
-        t_start = 2 * tx;
 
-        if (b_start + t_start < genome_length)
-            shared_genome[t_start] = genome[b_start + t_start];
-        if (b_start + t_start + 1 < genome_length)
-            shared_genome[t_start + 1] = genome[b_start + t_start + 1];
+        if (b_start + tx < genome_length)
+            shared_genome[tx] = genome[b_start + tx];
+        if (b_start + tx + TILE_WIDTH < genome_length)
+            shared_genome[tx + TILE_WIDTH] = genome[b_start + tx + TILE_WIDTH];
         __syncthreads();
 
         for (j = 0; j < num_guides; j++) {
@@ -319,12 +485,7 @@ __global__ void shared_constant_memory_gpu_kernel(
                 mismatches += shared_genome[tx + k] != guide[k];
 
             if (mismatches <= EDIT_DISTANCE_THRESHOLD) {
-                numResultsLocal = atomicAdd(numResults, 1);
-                if (numResultsLocal < sizeOfResults) {
-                    resultsIdx = numResultsLocal * 2;
-                    results[resultsIdx] = (uint64_t) j;
-                    results[resultsIdx + 1] = i;
-                }
+                insert_into_queue(results, sizeOfResults, numResults, j, i);
             }
         }
 
@@ -333,58 +494,116 @@ __global__ void shared_constant_memory_gpu_kernel(
 }
 
 /***************************************************************
-  COARSENED SHARED MEMORY & CONSTANT MEMORY GPU IMPLEMENTATION
+  SHARED MEMORY GPU IMPLEMENTATION
 ***************************************************************/
 
-__global__ void coarsened_shared_constant_memory_gpu_kernel(
+__global__ void shared_memory_gpu_kernel(
         char * genome,
-        uint64_t genome_length,
+        int64_t genome_length,
         char * guides,
         int num_guides,
-        uint64_t * results,
+        int64_t * results,
         int * numResults,
-        uint64_t sizeOfResults)
+        int64_t sizeOfResults)
 {
-    uint64_t tx = threadIdx.x;
-    uint64_t tid = blockDim.x * blockIdx.x + tx;
-    int numResultsLocal;
-    int resultsIdx;
+    int64_t tx = threadIdx.x;
+    int64_t tid = blockDim.x * blockIdx.x + tx;
     char * guide;
-    uint64_t i, b_start;
+    int64_t i, b_start;
     int mismatches;
-    int j, k, n, t_start;
-    char rc[GUIDE_SIZE + COARSE_FAC];
+    int j, k, next_idx;
 
-    __shared__ char shared_genome[TILE_WIDTH * (COARSE_FAC + 1)];
+    __shared__ char shared_genome[TILE_WIDTH * 2];
+    __shared__ char shared_guides[SIZE_OF_GUIDES];
 
-    for (i = tid * COARSE_FAC; i < genome_length - GUIDE_SIZE - 1; i += COARSE_FAC * gridDim.x * blockDim.x) {
+    if (tx < SIZE_OF_GUIDES)
+        shared_guides[tx] = guides[tx]; 
+    next_idx = tx + TILE_WIDTH;
+    if (next_idx < SIZE_OF_GUIDES)
+        shared_guides[next_idx] = guides[next_idx]; 
 
-        b_start = (i / (blockDim.x * COARSE_FAC)) * blockDim.x * COARSE_FAC;
-        t_start = (COARSE_FAC + 1) * tx;
+    for (i = tid; i < genome_length - GUIDE_SIZE - 1;
+            i += gridDim.x * blockDim.x) {
 
-        for (n = 0; n < COARSE_FAC + 1; n++) {
-            if (b_start + t_start + n < genome_length)
-                shared_genome[t_start + n] = genome[b_start + t_start + n];
+        b_start = (i / blockDim.x) * blockDim.x + tx;
+
+        if (b_start < genome_length)
+            shared_genome[tx] = genome[b_start];
+        if (b_start + TILE_WIDTH < genome_length)
+            shared_genome[tx + TILE_WIDTH] = genome[b_start + TILE_WIDTH];
+
+        __syncthreads();
+
+        for (j = 0; j < num_guides; j++) {
+            guide = shared_guides + (j * GUIDE_BUFFER_SIZE);
+
+            mismatches = 0;
+            for (k = 0; k < GUIDE_SIZE; k++)
+                mismatches += shared_genome[tx + k] != guide[k];
+
+            if (mismatches <= EDIT_DISTANCE_THRESHOLD) {
+                insert_into_queue(results, sizeOfResults, numResults, j, i);
+            }
+        }
+
+        __syncthreads();
+    }
+}
+
+/***************************************************************
+  COARSENED REGISTER TILING SHARED MEMORY GPU IMPLEMENTATION
+***************************************************************/
+
+__global__ void coarsened_register_shared_mem_gpu_kernel(
+        char * genome,
+        int64_t genome_length,
+        char * guides,
+        int num_guides,
+        int64_t * results,
+        int * numResults,
+        int64_t sizeOfResults)
+{
+    int64_t tx = threadIdx.x;
+    int64_t tid = blockDim.x * blockIdx.x + tx;
+    char * guide;
+    int64_t i, b_start;
+    int mismatches;
+    int j, k, n, next_idx;
+    char rc[GUIDE_SIZE + COARSE_SHARED];
+
+    __shared__ char shared_genome[TILE_WIDTH * (COARSE_SHARED + 1)];
+    __shared__ char shared_guides[SIZE_OF_GUIDES];
+
+    if (tx < SIZE_OF_GUIDES)
+        shared_guides[tx] = guides[tx]; 
+    next_idx = tx + TILE_WIDTH;
+    if (next_idx < SIZE_OF_GUIDES)
+        shared_guides[next_idx] = guides[next_idx]; 
+
+    for (i = tid * COARSE_SHARED; i < genome_length - GUIDE_SIZE - 1 - COARSE_SHARED;
+            i += COARSE_SHARED * gridDim.x * blockDim.x) {
+
+        b_start = (i / (blockDim.x * COARSE_SHARED)) * blockDim.x * COARSE_SHARED + tx;
+
+        for (n = 0; n < COARSE_SHARED + 1; n++) {
+            if (b_start + TILE_WIDTH * n < genome_length)
+                shared_genome[tx + TILE_WIDTH * n] = genome[b_start +
+                    TILE_WIDTH * n];
         }
         __syncthreads();
 
-        for (n = 0; n < GUIDE_SIZE + COARSE_FAC; n++)
-            rc[n] = shared_genome[COARSE_FAC * tx + n];
+        for (n = 0; n < GUIDE_SIZE + COARSE_SHARED; n++)
+            rc[n] = shared_genome[COARSE_SHARED * tx + n];
 
-        for (n = 0; n < COARSE_FAC; n++) {
+        for (n = 0; n < COARSE_SHARED; n++) {
             for (j = 0; j < num_guides; j++) {
-                guide = constant_guides + (j * GUIDE_BUFFER_SIZE);
+                guide = shared_guides + (j * GUIDE_BUFFER_SIZE);
                 mismatches = 0;
                 for (k = 0; k < GUIDE_SIZE; k++)
                     mismatches += rc[n + k] != guide[k];
 
                 if (mismatches <= EDIT_DISTANCE_THRESHOLD) {
-                    numResultsLocal = atomicAdd(numResults, 1);
-                    if (numResultsLocal < sizeOfResults) {
-                        resultsIdx = numResultsLocal * 2;
-                        results[resultsIdx] = (uint64_t) j;
-                        results[resultsIdx + 1] = i + n;
-                    }
+                    insert_into_queue(results, sizeOfResults, numResults, j, i + n);
                 }
             }
         }
@@ -397,18 +616,27 @@ __global__ void coarsened_shared_constant_memory_gpu_kernel(
   GPU KERNEL LAUNCHER
 ***************************************************************/
 
-enum methods {naive, s_memory, s_c_memory, coarsened_s_c_memory};
+enum methods {
+    naive,
+    s_memory,
+    s_c_memory,
+    coarsened_s_r_memory,
+    register_tiling,
+    coarsened_register_tiling,
+    coarsened_register_tiling_s_g,
+    coarsened_register_tiling_s_g_wq
+};
 void gpu_guide_matching(
         char * genome,
-        uint64_t genome_length,
+        int64_t genome_length,
         char * guides,
         int num_guides,
-        uint64_t * hostResults,
+        int64_t * hostResults,
         int * hostNumResults,
-        uint64_t sizeOfResults,
+        int64_t sizeOfResults,
         methods method)
 {
-    uint64_t * deviceResults;
+    int64_t * deviceResults;
     char * deviceGenome;
     char * deviceGuides;
     int * deviceNumResults;
@@ -423,13 +651,26 @@ void gpu_guide_matching(
 
     dim3 dimGridNaive(ceil((genome_length) / double(TILE_WIDTH)));
     dim3 dimBlockNaive(TILE_WIDTH);
-    dim3 dimGridCoarsened(ceil(genome_length / double(TILE_WIDTH * COARSE_FAC)));
+    dim3 dimGridCoarsenedReg(ceil(genome_length / double(TILE_WIDTH * COARSE_REG)));
+    dim3 dimGridCoarsenedShared(ceil(genome_length / double(TILE_WIDTH * COARSE_SHARED)));
+
     switch (method) {
-        case naive: 
+        case naive:
             naive_gpu_kernel<<<dimGridNaive, dimBlockNaive>>>(
                     deviceGenome,
                     genome_length,
                     deviceGuides,
+                    num_guides,
+                    deviceResults,
+                    deviceNumResults,
+                    sizeOfResults
+                    );
+            break;
+        case s_c_memory:
+            CUDA_CHECK(cudaMemcpyToSymbol(constant_guides, deviceGuides, SIZE_OF_GUIDES));
+            shared_constant_memory_gpu_kernel<<<dimGridNaive, dimBlockNaive>>>(
+                    deviceGenome,
+                    genome_length,
                     num_guides,
                     deviceResults,
                     deviceNumResults,
@@ -447,9 +688,8 @@ void gpu_guide_matching(
                     sizeOfResults
                     );
             break;
-        case s_c_memory:
-            CUDA_CHECK(cudaMemcpyToSymbol(constant_guides, deviceGuides, CONSTANT_MEMORY_SIZE));
-            shared_constant_memory_gpu_kernel<<<dimGridNaive, dimBlockNaive>>>(
+        case coarsened_s_r_memory:
+            coarsened_register_shared_mem_gpu_kernel<<<dimGridCoarsenedShared, dimBlockNaive>>>(
                     deviceGenome,
                     genome_length,
                     deviceGuides,
@@ -459,9 +699,41 @@ void gpu_guide_matching(
                     sizeOfResults
                     );
             break;
-        case coarsened_s_c_memory:
-            CUDA_CHECK(cudaMemcpyToSymbol(constant_guides, deviceGuides, CONSTANT_MEMORY_SIZE));
-            coarsened_shared_constant_memory_gpu_kernel<<<dimGridCoarsened, dimBlockNaive>>>(
+        case register_tiling:
+            register_tiling_gpu_kernel<<<dimGridNaive, dimBlockNaive>>>(
+                    deviceGenome,
+                    genome_length,
+                    deviceGuides,
+                    num_guides,
+                    deviceResults,
+                    deviceNumResults,
+                    sizeOfResults
+                    );
+            break;
+        case coarsened_register_tiling:
+            coarsened_register_tiling_gpu_kernel<<<dimGridCoarsenedReg, dimBlockNaive>>>(
+                    deviceGenome,
+                    genome_length,
+                    deviceGuides,
+                    num_guides,
+                    deviceResults,
+                    deviceNumResults,
+                    sizeOfResults
+                    );
+            break;
+        case coarsened_register_tiling_s_g:
+            coarsened_register_tiling_shared_guides_gpu_kernel<<<dimGridCoarsenedReg, dimBlockNaive>>>(
+                    deviceGenome,
+                    genome_length,
+                    deviceGuides,
+                    num_guides,
+                    deviceResults,
+                    deviceNumResults,
+                    sizeOfResults
+                    );
+            break;
+        case coarsened_register_tiling_s_g_wq:
+            coarsened_register_tiling_shared_guides_wq_gpu_kernel<<<dimGridCoarsenedReg, dimBlockNaive>>>(
                     deviceGenome,
                     genome_length,
                     deviceGuides,
@@ -493,7 +765,7 @@ int main(int argc, char ** argv) {
      *Read the genome and guides into memory
      */
     int num_guides;
-    uint64_t genome_length;
+    int64_t genome_length;
     char * genome = read_genome(GENOME_FILE_PATH, &genome_length);
     char * guides = read_guides(GUIDES_FILE_PATH, &num_guides);
     float msec;
@@ -507,12 +779,12 @@ int main(int argc, char ** argv) {
      *Instantiate our results variables
      */
     results_t results_truth;
-    uint64_t sizeOfResults = num_guides * MATCHES_PER_GUIDE * sizeof(uint64_t);
-    uint64_t * hostResults = (uint64_t *) malloc(sizeOfResults);
+    int64_t sizeOfResults = num_guides * MATCHES_PER_GUIDE * sizeof(int64_t);
+    int64_t * hostResults = (int64_t *) malloc(sizeOfResults);
     int hostNumResults;
 
     // For testing smaller lengths
-    uint64_t genome_length_test = genome_length;
+    int64_t genome_length_test = genome_length;
 
     /*
      *timer_start("Naive CPU");
@@ -522,10 +794,7 @@ int main(int argc, char ** argv) {
      *PRINT("Ground truth results size: {}", results_truth.size());
      */
 
-    methods method;
-
     timer_start("Naive GPU");
-    method = naive;
     gpu_guide_matching(
             genome,
             genome_length_test,
@@ -534,30 +803,13 @@ int main(int argc, char ** argv) {
             hostResults,
             &hostNumResults,
             sizeOfResults,
-            method);
+            naive);
     msec = timer_stop();
     estimate_total_time(msec, genome_length, genome_length_test);
     PRINT("Naive GPU results size: {}", hostNumResults);
     assert_results_equal(results_truth, hostResults, hostNumResults);
 
-    timer_start("shared memory gpu");
-    method = s_memory;
-    gpu_guide_matching(
-            genome,
-            genome_length_test,
-            guides,
-            num_guides,
-            hostResults,
-            &hostNumResults,
-            sizeOfResults,
-            method);
-    msec = timer_stop();
-    estimate_total_time(msec, genome_length, genome_length_test);
-    PRINT("Shared Memory GPU results size: {}", hostNumResults);
-    assert_results_equal(results_truth, hostResults, hostNumResults);
-
     timer_start("Shared + Constant Memory GPU");
-    method = s_c_memory;
     gpu_guide_matching(
             genome,
             genome_length_test,
@@ -569,11 +821,10 @@ int main(int argc, char ** argv) {
             s_c_memory);
     msec = timer_stop();
     estimate_total_time(msec, genome_length, genome_length_test);
-    PRINT("Shared + Constant Memory GPU results size: {}", hostNumResults);
+    PRINT("Shared Memory GPU results size: {}", hostNumResults);
     assert_results_equal(results_truth, hostResults, hostNumResults);
 
-    timer_start("Coarsened Shared + Constant Memory GPU");
-    method = s_c_memory;
+    timer_start("Shared Memory GPU");
     gpu_guide_matching(
             genome,
             genome_length_test,
@@ -582,16 +833,91 @@ int main(int argc, char ** argv) {
             hostResults,
             &hostNumResults,
             sizeOfResults,
-            coarsened_s_c_memory);
+            s_memory);
     msec = timer_stop();
     estimate_total_time(msec, genome_length, genome_length_test);
-    PRINT("Coarsened Shared + Constant Memory GPU results size: {}", hostNumResults);
+    PRINT("Shared Memory GPU results size: {}", hostNumResults);
+    assert_results_equal(results_truth, hostResults, hostNumResults);
+
+    timer_start("Coarsened Register + Shared Memory GPU");
+    gpu_guide_matching(
+            genome,
+            genome_length_test,
+            guides,
+            num_guides,
+            hostResults,
+            &hostNumResults,
+            sizeOfResults,
+            coarsened_s_r_memory);
+    msec = timer_stop();
+    estimate_total_time(msec, genome_length, genome_length_test);
+    PRINT("Coarsened Register + Shared Memory GPU results size: {}", hostNumResults);
+    assert_results_equal(results_truth, hostResults, hostNumResults);
+
+    timer_start("Register Tiling GPU");
+    gpu_guide_matching(
+            genome,
+            genome_length_test,
+            guides,
+            num_guides,
+            hostResults,
+            &hostNumResults,
+            sizeOfResults,
+            register_tiling);
+    msec = timer_stop();
+    estimate_total_time(msec, genome_length, genome_length_test);
+    PRINT("Register Tiling GPU results size: {}", hostNumResults);
+    assert_results_equal(results_truth, hostResults, hostNumResults);
+
+    timer_start("Coarsened Register Tiling GPU");
+    gpu_guide_matching(
+            genome,
+            genome_length_test,
+            guides,
+            num_guides,
+            hostResults,
+            &hostNumResults,
+            sizeOfResults,
+            coarsened_register_tiling);
+    msec = timer_stop();
+    estimate_total_time(msec, genome_length, genome_length_test);
+    PRINT("Coarsened Register Tiling GPU results size: {}", hostNumResults);
+    assert_results_equal(results_truth, hostResults, hostNumResults);
+
+    timer_start("Coarsened Register Tiling + Shared Guides GPU");
+    gpu_guide_matching(
+            genome,
+            genome_length_test,
+            guides,
+            num_guides,
+            hostResults,
+            &hostNumResults,
+            sizeOfResults,
+            coarsened_register_tiling_s_g);
+    msec = timer_stop();
+    estimate_total_time(msec, genome_length, genome_length_test);
+    PRINT("Coarsened Register Tiling + Shared Guides GPU results size: {}", hostNumResults);
+    assert_results_equal(results_truth, hostResults, hostNumResults);
+
+    timer_start("Coarsened Register Tiling + Warp Queue + Shared Guides GPU");
+    gpu_guide_matching(
+            genome,
+            genome_length_test,
+            guides,
+            num_guides,
+            hostResults,
+            &hostNumResults,
+            sizeOfResults,
+            coarsened_register_tiling_s_g_wq);
+    msec = timer_stop();
+    estimate_total_time(msec, genome_length, genome_length_test);
+    PRINT("Coarsened Register Tiling + Warp Queue + Shared Guides GPU results size: {}", hostNumResults);
     assert_results_equal(results_truth, hostResults, hostNumResults);
 
     /*
      *Free up any dynamic memory
      */
-    delete[] genome;
+    free(genome);
     free(guides);
     free(hostResults);
     return EXIT_SUCCESS;
