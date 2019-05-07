@@ -12,12 +12,12 @@ commands:
     - cmake /src
     - make
     #-  nvprof -f --analysis-metrics -o timeline.nvvp ./crispr-cuda
-    #-  ./crispr-cuda 0
-    #-  ./crispr-cuda 1
-    #-  ./crispr-cuda 2
-    #-  ./crispr-cuda 3
-    #-  ./crispr-cuda 4
-    #-  ./crispr-cuda 5
-    #-  ./crispr-cuda 6
-    #-  ./crispr-cuda 7
+    -  ./crispr-cuda 0
+    -  ./crispr-cuda 1
+    -  ./crispr-cuda 2
+    -  ./crispr-cuda 3
+    -  ./crispr-cuda 4
+    -  ./crispr-cuda 5
+    -  ./crispr-cuda 6
+    -  ./crispr-cuda 7
     -  ./crispr-cuda 8

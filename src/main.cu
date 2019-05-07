@@ -36,7 +36,7 @@ using namespace std;
 #define MATCHES_PER_GUIDE 8000
 
 
-#define TILE_WIDTH 256
+#define TILE_WIDTH 512
 #define TILE_WIDTH_SHUF 256
 #define WARP_SIZE 32
 #define NUM_WARPS (TILE_WIDTH / WARP_SIZE)
@@ -45,7 +45,7 @@ using namespace std;
 #define OUTPUT_PER_THREAD_SHUF 4
 #define OUTPUT_PER_THREAD_SHARED 8
 
-// ceil((WARP_SIZE * OUTPUT_PER_THREAD_REG + GUIDE_SIZE - 1) / WARP_SIZE) = 9
+// ceil((WARP_SIZE * OUTPUT_PER_THREAD + GUIDE_SIZE - 1) / WARP_SIZE) = 9
 #define LOCAL_REGISTER_SIZE (OUTPUT_PER_THREAD_SHUF + 1)
 
 // Maximum number of elements that can be inserted into a block queue
@@ -767,10 +767,10 @@ static const string method_strings[] = {
     "Shared Genome + Constant Guides",
     "Coarsened Shared Genome & Guides + Register Cache",
     "Register cache",
-    "Coarsened Register Tiling",
-    "Coarsened Register Tiling + Shared Guides",
-    "Coarsened Register Tiling + Shared Guides + Warp Queue",
-    "Coarsened Register Tiling with shuffle + Shared Guides"
+    "Coarsened Register Cache",
+    "Coarsened Register Cache + Shared Guides",
+    "Coarsened Register Cache + Shared Guides + Warp Queue",
+    "Coarsened Register Cache with shuffle + Shared Guides"
 };
 void gpu_guide_matching(
         char * genome,
@@ -971,7 +971,7 @@ int main(int argc, char ** argv) {
 
     int64_t step = 100000000;
     string divider = "============================";
-    for (genome_length_test = genome_length; genome_length_test <= genome_length; genome_length_test += step) {
+    for (genome_length_test = step; genome_length_test <= genome_length; genome_length_test += step) {
         gpu_guide_matching(
                 genome,
                 genome_length_test,
