@@ -26,16 +26,13 @@ test_lengths = set()
 for benchmark in benchmarks:
     for line in benchmark:
         if "test_length" in line:
-            pdb.set_trace()
             current_test_length = int(line.split("test_length")[-1].split()[-1])
             test_lengths.add(current_test_length)
         elif "Executing" in line and "took" in line:
-            pdb.set_trace()
             ms = float(line.split("took")[-1].split("ms")[0])
-            method = line.split("took")[0].split(" ", 1)[-1].strip()
+            method = line.split("took")[0].split(" ", 4)[-1].strip()
             csv[method][current_test_length].append(ms)
 
-del csv["Naive CPU"]
 pprint(test_lengths)
 pprint(csv.keys())
 with open("benchmarks.csv", "w") as fp:

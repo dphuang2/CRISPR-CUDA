@@ -172,7 +172,13 @@ void estimate_total_time(float msec, int64_t genome_length, int64_t genome_lengt
   NAIVE CPU IMPLEMENTATION
 ***************************************************************/
 
-results_t naive_cpu_guide_matching(char * genome, int64_t genome_length, char * guides, int num_guides) {
+results_t naive_cpu_guide_matching(
+    char * genome,
+    int64_t genome_length,
+    char * guides,
+    int num_guides
+    )
+{
     results_t results;
     char * guide;
     int mismatches;
