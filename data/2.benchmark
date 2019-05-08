@@ -1,0 +1,1989 @@
+[32m✱ Checking your authentication credentials.[0m
+[33m✱ Preparing your project directory for upload.[0m
+[33m✱ Uploading your project directory. This may take a few minutes.[0m
+ 0 B / 144.62 KiB ┃░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░┃   0.00% 144.62 KiB / 144.62 KiB ┃▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓┃ 100.00% 1.41 MiB/s 144.62 KiB / 144.62 KiB ┃▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓┃ 100.00% 803.60 KiB/s 0s
+[32m✱ Folder uploaded. Server is now processing your submission.[0m
+[32m✱ Your job request has been posted to the queue.[0m
+[37m⣾[0m Waiting for the server to process your request... [K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[37m⣽[0m Waiting for the server to process your request... [K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[33m✱ Server has accepted your job submission and started to configure the container.[0m
+[33m✱ Downloading your code.[0m
+[33m✱ Using balphi/crispr-cuda:4 as container image.[0m
+[33m✱ Starting container.[0m
+[32m✱ Running cp -r /src .[0m
+[32m✱ Running cmake /src[0m
+-- The CXX compiler identification is GNU 7.3.0
+-- The CUDA compiler identification is NVIDIA 10.0.130
+-- Check for working CXX compiler: /usr/bin/c++
+-- Check for working CXX compiler: /usr/bin/c++ -- works
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Check for working CUDA compiler: /usr/local/cuda/bin/nvcc
+-- Check for working CUDA compiler: /usr/local/cuda/bin/nvcc -- works
+-- Detecting CUDA compiler ABI info
+-- Detecting CUDA compiler ABI info - done
+-- Looking for C++ include pthread.h
+-- Looking for C++ include pthread.h - found
+-- Looking for pthread_create
+-- Looking for pthread_create - not found
+-- Looking for pthread_create in pthreads
+-- Looking for pthread_create in pthreads - not found
+-- Looking for pthread_create in pthread
+-- Looking for pthread_create in pthread - found
+-- Found Threads: TRUE  
+-- Found CUDA: /usr/local/cuda (found version "10.0") 
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /build
+[32m✱ Running make[0m
+[35m[1mScanning dependencies of target crispr-cuda[0m
+[ 33%] [32mBuilding CUDA object CMakeFiles/crispr-cuda.dir/main.cu.o[0m
+[ 66%] [32m[1mLinking CUDA device code CMakeFiles/crispr-cuda.dir/cmake_device_link.o[0m
+[100%] [32m[1mLinking CUDA executable crispr-cuda[0m
+[100%] Built target crispr-cuda
+[32m✱ Running ./crispr-cuda 0[0m
+[34mInfo:: [0mGenome length: 3049315783 nucleotides (bytes)
+[34mInfo:: [0mNumber of guides: 46
+[34mTIMER::[0m Naive CPU took [32m1424.267212ms[0m
+[34mInfo:: [0mEstimated total time: 1.2064 hours (72.384 minutes)
+[34mInfo:: [0mGround truth results size: 1089
+[34mInfo:: [0mgenome_test_length: 100000000
+[34mTIMER::[0m Allocating GPU Memory took [32m1.490656ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m13.548640ms[0m
+[34mTIMER::[0m Executing kernel w/ Naive took [32m93.328415ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m1.654560ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 5125============================
+[34mInfo:: [0mgenome_test_length: 200000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.985920ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m36.070625ms[0m
+[34mTIMER::[0m Executing kernel w/ Naive took [32m176.970779ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.428064ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 8746============================
+[34mInfo:: [0mgenome_test_length: 300000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.988256ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m40.277729ms[0m
+[34mTIMER::[0m Executing kernel w/ Naive took [32m253.040421ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.407328ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 12304============================
+[34mInfo:: [0mgenome_test_length: 400000000
+[34mTIMER::[0m Allocating GPU Memory took [32m3.003680ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m55.339554ms[0m
+[34mTIMER::[0m Executing kernel w/ Naive took [32m337.377594ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.407808ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 17035============================
+[34mInfo:: [0mgenome_test_length: 500000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.988704ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m70.637085ms[0m
+[34mTIMER::[0m Executing kernel w/ Naive took [32m421.712646ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.420576ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 21221============================
+[34mInfo:: [0mgenome_test_length: 600000000
+[34mTIMER::[0m Allocating GPU Memory took [32m3.017088ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m90.950562ms[0m
+[34mTIMER::[0m Executing kernel w/ Naive took [32m506.055542ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.419936ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 24567============================
+[34mInfo:: [0mgenome_test_length: 700000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.995840ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m102.244164ms[0m
+[34mTIMER::[0m Executing kernel w/ Naive took [32m590.871826ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.413888ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 28317============================
+[34mInfo:: [0mgenome_test_length: 800000000
+[34mTIMER::[0m Allocating GPU Memory took [32m3.002080ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m117.491936ms[0m
+[34mTIMER::[0m Executing kernel w/ Naive took [32m674.718018ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.445408ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 31669============================
+[34mInfo:: [0mgenome_test_length: 900000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.995072ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m132.758881ms[0m
+[34mTIMER::[0m Executing kernel w/ Naive took [32m759.041626ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.421248ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 36569============================
+[34mInfo:: [0mgenome_test_length: 1000000000
+[34mTIMER::[0m Allocating GPU Memory took [32m3.004448ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m148.230789ms[0m
+[34mTIMER::[0m Executing kernel w/ Naive took [32m843.377991ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.436384ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 42373============================
+[34mInfo:: [0mgenome_test_length: 1100000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.961632ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m164.537155ms[0m
+[34mTIMER::[0m Executing kernel w/ Naive took [32m927.699890ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.420544ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 47429============================
+[34mInfo:: [0mgenome_test_length: 1200000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.989024ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m179.765533ms[0m
+[34mTIMER::[0m Executing kernel w/ Naive took [32m1012.037048ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.436320ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 52093============================
+[34mInfo:: [0mgenome_test_length: 1300000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.993056ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m195.984711ms[0m
+[34mTIMER::[0m Executing kernel w/ Naive took [32m1096.488892ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.511872ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 56402============================
+[34mInfo:: [0mgenome_test_length: 1400000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.983392ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m227.580475ms[0m
+[34mTIMER::[0m Executing kernel w/ Naive took [32m1181.181885ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.428992ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 59742============================
+[34mInfo:: [0mgenome_test_length: 1500000000
+[34mTIMER::[0m Allocating GPU Memory took [32m3.006432ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m227.206238ms[0m
+[34mTIMER::[0m Executing kernel w/ Naive took [32m1265.017090ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.421024ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 64088============================
+[34mInfo:: [0mgenome_test_length: 1600000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.043328ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m242.452377ms[0m
+[34mTIMER::[0m Executing kernel w/ Naive took [32m1349.332642ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.420832ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 69715============================
+[34mInfo:: [0mgenome_test_length: 1700000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.036640ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m257.357941ms[0m
+[34mTIMER::[0m Executing kernel w/ Naive took [32m1433.662231ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.432352ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 73013============================
+[34mInfo:: [0mgenome_test_length: 1800000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.051968ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m367.588776ms[0m
+[34mTIMER::[0m Executing kernel w/ Naive took [32m1518.515991ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.447456ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 76874============================
+[34mInfo:: [0mgenome_test_length: 1900000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.049760ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m289.261780ms[0m
+[34mTIMER::[0m Executing kernel w/ Naive took [32m1602.338745ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.425120ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 79748============================
+[34mInfo:: [0mgenome_test_length: 2000000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.053312ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m305.106079ms[0m
+[34mTIMER::[0m Executing kernel w/ Naive took [32m1686.672607ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.449728ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 82888============================
+[34mInfo:: [0mgenome_test_length: 2100000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.031040ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m319.565094ms[0m
+[34mTIMER::[0m Executing kernel w/ Naive took [32m1770.993896ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.527520ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 85449============================
+[34mInfo:: [0mgenome_test_length: 2200000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.034336ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m354.422272ms[0m
+[34mTIMER::[0m Executing kernel w/ Naive took [32m1855.813721ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.429536ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 89760============================
+[34mInfo:: [0mgenome_test_length: 2300000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.055584ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m435.266602ms[0m
+[34mTIMER::[0m Executing kernel w/ Naive took [32m1939.882202ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.443040ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 92762============================
+[34mInfo:: [0mgenome_test_length: 2400000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.050016ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m365.779205ms[0m
+[34mTIMER::[0m Executing kernel w/ Naive took [32m2024.029541ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.426112ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 96591============================
+[34mInfo:: [0mgenome_test_length: 2500000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.052992ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m380.877625ms[0m
+[34mTIMER::[0m Executing kernel w/ Naive took [32m2108.843994ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.459904ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 100221============================
+[34mInfo:: [0mgenome_test_length: 2600000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.053632ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m396.592316ms[0m
+[34mTIMER::[0m Executing kernel w/ Naive took [32m2192.708740ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.451616ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 103429============================
+[34mInfo:: [0mgenome_test_length: 2700000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.049920ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m411.310974ms[0m
+[34mTIMER::[0m Executing kernel w/ Naive took [32m2277.024414ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.508480ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 107032============================
+[34mInfo:: [0mgenome_test_length: 2800000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.034464ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m456.701111ms[0m
+[34mTIMER::[0m Executing kernel w/ Naive took [32m2361.353516ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.470240ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 112175============================
+[34mInfo:: [0mgenome_test_length: 2900000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.053376ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m500.297668ms[0m
+[34mTIMER::[0m Executing kernel w/ Naive took [32m2445.634766ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.475968ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 117613============================
+[34mInfo:: [0mgenome_test_length: 3000000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.368256ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m506.175446ms[0m
+[34mTIMER::[0m Executing kernel w/ Naive took [32m2530.518799ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.470336ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 120565============================
+[32m✱ Running ./crispr-cuda 1[0m
+[34mInfo:: [0mGenome length: 3049315783 nucleotides (bytes)
+[34mInfo:: [0mNumber of guides: 46
+[34mTIMER::[0m Naive CPU took [32m1447.369263ms[0m
+[34mInfo:: [0mEstimated total time: 1.22597 hours (73.5581 minutes)
+[34mInfo:: [0mGround truth results size: 1089
+[34mInfo:: [0mgenome_test_length: 100000000
+[34mTIMER::[0m Allocating GPU Memory took [32m0.549312ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m13.116352ms[0m
+[34mTIMER::[0m Executing kernel w/ Shared Genome & Guides took [32m54.635937ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m1.574368ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 5125============================
+[34mInfo:: [0mgenome_test_length: 200000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.771680ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m26.127169ms[0m
+[34mTIMER::[0m Executing kernel w/ Shared Genome & Guides took [32m109.253090ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.429120ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 8746============================
+[34mInfo:: [0mgenome_test_length: 300000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.998816ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m41.272480ms[0m
+[34mTIMER::[0m Executing kernel w/ Shared Genome & Guides took [32m163.819778ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.419648ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 12304============================
+[34mInfo:: [0mgenome_test_length: 400000000
+[34mTIMER::[0m Allocating GPU Memory took [32m3.012256ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m57.053505ms[0m
+[34mTIMER::[0m Executing kernel w/ Shared Genome & Guides took [32m218.421432ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.467520ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 17035============================
+[34mInfo:: [0mgenome_test_length: 500000000
+[34mTIMER::[0m Allocating GPU Memory took [32m3.001440ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m93.579010ms[0m
+[34mTIMER::[0m Executing kernel w/ Shared Genome & Guides took [32m273.015533ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.457408ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 21221============================
+[34mInfo:: [0mgenome_test_length: 600000000
+[34mTIMER::[0m Allocating GPU Memory took [32m3.008768ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m87.740257ms[0m
+[34mTIMER::[0m Executing kernel w/ Shared Genome & Guides took [32m327.601868ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.418848ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 24567============================
+[34mInfo:: [0mgenome_test_length: 700000000
+[34mTIMER::[0m Allocating GPU Memory took [32m3.008320ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m103.172035ms[0m
+[34mTIMER::[0m Executing kernel w/ Shared Genome & Guides took [32m382.204407ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.464288ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 28317============================
+[34mInfo:: [0mgenome_test_length: 800000000
+[34mTIMER::[0m Allocating GPU Memory took [32m3.001344ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m163.509094ms[0m
+[34mTIMER::[0m Executing kernel w/ Shared Genome & Guides took [32m436.800018ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.447872ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 31669============================
+[34mInfo:: [0mgenome_test_length: 900000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.995136ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m133.063385ms[0m
+[34mTIMER::[0m Executing kernel w/ Shared Genome & Guides took [32m491.875061ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.418592ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 36569============================
+[34mInfo:: [0mgenome_test_length: 1000000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.981792ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m161.734619ms[0m
+[34mTIMER::[0m Executing kernel w/ Shared Genome & Guides took [32m545.997314ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.443936ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 42373============================
+[34mInfo:: [0mgenome_test_length: 1100000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.966976ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m163.058914ms[0m
+[34mTIMER::[0m Executing kernel w/ Shared Genome & Guides took [32m600.597412ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.437536ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 47429============================
+[34mInfo:: [0mgenome_test_length: 1200000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.734560ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m237.632858ms[0m
+[34mTIMER::[0m Executing kernel w/ Shared Genome & Guides took [32m655.192200ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.447712ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 52093============================
+[34mInfo:: [0mgenome_test_length: 1300000000
+[34mTIMER::[0m Allocating GPU Memory took [32m3.006016ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m194.653122ms[0m
+[34mTIMER::[0m Executing kernel w/ Shared Genome & Guides took [32m709.772888ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.509024ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 56402============================
+[34mInfo:: [0mgenome_test_length: 1400000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.999584ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m227.361374ms[0m
+[34mTIMER::[0m Executing kernel w/ Shared Genome & Guides took [32m764.364624ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.432320ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 59742============================
+[34mInfo:: [0mgenome_test_length: 1500000000
+[34mTIMER::[0m Allocating GPU Memory took [32m3.003616ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m225.055359ms[0m
+[34mTIMER::[0m Executing kernel w/ Shared Genome & Guides took [32m818.950256ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.450080ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 64088============================
+[34mInfo:: [0mgenome_test_length: 1600000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.056032ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m239.692230ms[0m
+[34mTIMER::[0m Executing kernel w/ Shared Genome & Guides took [32m873.549255ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.527712ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 69715============================
+[34mInfo:: [0mgenome_test_length: 1700000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.048672ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m288.808441ms[0m
+[34mTIMER::[0m Executing kernel w/ Shared Genome & Guides took [32m928.187744ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.434080ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 73013============================
+[34mInfo:: [0mgenome_test_length: 1800000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.054880ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m283.831360ms[0m
+[34mTIMER::[0m Executing kernel w/ Shared Genome & Guides took [32m982.750854ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.451328ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 76874============================
+[34mInfo:: [0mgenome_test_length: 1900000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.053696ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m285.355743ms[0m
+[34mTIMER::[0m Executing kernel w/ Shared Genome & Guides took [32m1037.344971ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.459232ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 79748============================
+[34mInfo:: [0mgenome_test_length: 2000000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.058336ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m300.863281ms[0m
+[34mTIMER::[0m Executing kernel w/ Shared Genome & Guides took [32m1091.934326ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.500608ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 82888============================
+[34mInfo:: [0mgenome_test_length: 2100000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.049120ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m406.046082ms[0m
+[34mTIMER::[0m Executing kernel w/ Shared Genome & Guides took [32m1146.523682ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.444736ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 85449============================
+[34mInfo:: [0mgenome_test_length: 2200000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.053312ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m363.204163ms[0m
+[34mTIMER::[0m Executing kernel w/ Shared Genome & Guides took [32m1201.657104ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.461984ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 89760============================
+[34mInfo:: [0mgenome_test_length: 2300000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.055264ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m347.647675ms[0m
+[34mTIMER::[0m Executing kernel w/ Shared Genome & Guides took [32m1255.745239ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.470784ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 92762============================
+[34mInfo:: [0mgenome_test_length: 2400000000
+[34mTIMER::[0m Allocating GPU Memory took [32m6.169184ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m359.834808ms[0m
+[34mTIMER::[0m Executing kernel w/ Shared Genome & Guides took [32m1310.458008ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.455072ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 96591============================
+[34mInfo:: [0mgenome_test_length: 2500000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.040992ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m377.611877ms[0m
+[34mTIMER::[0m Executing kernel w/ Shared Genome & Guides took [32m1364.900757ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.492032ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 100221============================
+[34mInfo:: [0mgenome_test_length: 2600000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.054016ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m503.784882ms[0m
+[34mTIMER::[0m Executing kernel w/ Shared Genome & Guides took [32m1420.013916ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.437280ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 103429============================
+[34mInfo:: [0mgenome_test_length: 2700000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.279808ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m412.740295ms[0m
+[34mTIMER::[0m Executing kernel w/ Shared Genome & Guides took [32m1474.132324ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.539040ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 107032============================
+[34mInfo:: [0mgenome_test_length: 2800000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.048000ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m424.910278ms[0m
+[34mTIMER::[0m Executing kernel w/ Shared Genome & Guides took [32m1528.718140ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.511552ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 112175============================
+[34mInfo:: [0mgenome_test_length: 2900000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.049952ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m479.125122ms[0m
+[34mTIMER::[0m Executing kernel w/ Shared Genome & Guides took [32m1583.292725ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.593056ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 117613============================
+[34mInfo:: [0mgenome_test_length: 3000000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.373248ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m453.695129ms[0m
+[34mTIMER::[0m Executing kernel w/ Shared Genome & Guides took [32m1638.422119ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.534912ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 120565============================
+[32m✱ Running ./crispr-cuda 2[0m
+[34mInfo:: [0mGenome length: 3049315783 nucleotides (bytes)
+[34mInfo:: [0mNumber of guides: 46
+[34mTIMER::[0m Naive CPU took [32m1426.661621ms[0m
+[34mInfo:: [0mEstimated total time: 1.20843 hours (72.5057 minutes)
+[34mInfo:: [0mGround truth results size: 1089
+[34mInfo:: [0mgenome_test_length: 100000000
+[34mTIMER::[0m Allocating GPU Memory took [32m0.540768ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m17.902369ms[0m
+[34mTIMER::[0m Executing kernel w/ Shared Genome + Constant Guides took [32m54.935680ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m1.876768ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 5125============================
+[34mInfo:: [0mgenome_test_length: 200000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.741600ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m35.096256ms[0m
+[34mTIMER::[0m Executing kernel w/ Shared Genome + Constant Guides took [32m109.809692ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.437568ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 8746============================
+[34mInfo:: [0mgenome_test_length: 300000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.036352ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m37.144737ms[0m
+[34mTIMER::[0m Executing kernel w/ Shared Genome + Constant Guides took [32m164.658112ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.405536ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 12304============================
+[34mInfo:: [0mgenome_test_length: 400000000
+[34mTIMER::[0m Allocating GPU Memory took [32m3.008448ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m53.043839ms[0m
+[34mTIMER::[0m Executing kernel w/ Shared Genome + Constant Guides took [32m219.530151ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.397792ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 17035============================
+[34mInfo:: [0mgenome_test_length: 500000000
+[34mTIMER::[0m Allocating GPU Memory took [32m3.007136ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m67.963646ms[0m
+[34mTIMER::[0m Executing kernel w/ Shared Genome + Constant Guides took [32m274.398254ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.414080ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 21221============================
+[34mInfo:: [0mgenome_test_length: 600000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.991104ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m120.568092ms[0m
+[34mTIMER::[0m Executing kernel w/ Shared Genome + Constant Guides took [32m329.275970ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.429920ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 24567============================
+[34mInfo:: [0mgenome_test_length: 700000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.984800ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m98.573891ms[0m
+[34mTIMER::[0m Executing kernel w/ Shared Genome + Constant Guides took [32m384.141998ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.404544ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 28317============================
+[34mInfo:: [0mgenome_test_length: 800000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.999872ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m113.300323ms[0m
+[34mTIMER::[0m Executing kernel w/ Shared Genome + Constant Guides took [32m439.009949ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.431584ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 31669============================
+[34mInfo:: [0mgenome_test_length: 900000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.953600ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m129.136292ms[0m
+[34mTIMER::[0m Executing kernel w/ Shared Genome + Constant Guides took [32m493.881073ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.439968ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 36569============================
+[34mInfo:: [0mgenome_test_length: 1000000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.991424ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m143.463715ms[0m
+[34mTIMER::[0m Executing kernel w/ Shared Genome + Constant Guides took [32m548.753906ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.427296ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 42373============================
+[34mInfo:: [0mgenome_test_length: 1100000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.962688ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m158.106247ms[0m
+[34mTIMER::[0m Executing kernel w/ Shared Genome + Constant Guides took [32m603.629883ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.414272ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 47429============================
+[34mInfo:: [0mgenome_test_length: 1200000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.985856ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m175.170334ms[0m
+[34mTIMER::[0m Executing kernel w/ Shared Genome + Constant Guides took [32m658.491699ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.462496ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 52093============================
+[34mInfo:: [0mgenome_test_length: 1300000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.955232ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m187.347839ms[0m
+[34mTIMER::[0m Executing kernel w/ Shared Genome + Constant Guides took [32m713.367737ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.494656ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 56402============================
+[34mInfo:: [0mgenome_test_length: 1400000000
+[34mTIMER::[0m Allocating GPU Memory took [32m5.085504ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m257.506195ms[0m
+[34mTIMER::[0m Executing kernel w/ Shared Genome + Constant Guides took [32m768.236877ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.417888ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 59742============================
+[34mInfo:: [0mgenome_test_length: 1500000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.991776ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m217.507004ms[0m
+[34mTIMER::[0m Executing kernel w/ Shared Genome + Constant Guides took [32m823.109375ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.431424ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 64088============================
+[34mInfo:: [0mgenome_test_length: 1600000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.047104ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m231.736893ms[0m
+[34mTIMER::[0m Executing kernel w/ Shared Genome + Constant Guides took [32m877.984009ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.526592ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 69715============================
+[34mInfo:: [0mgenome_test_length: 1700000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.023616ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m258.497101ms[0m
+[34mTIMER::[0m Executing kernel w/ Shared Genome + Constant Guides took [32m932.842224ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.441216ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 73013============================
+[34mInfo:: [0mgenome_test_length: 1800000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.045376ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m320.241669ms[0m
+[34mTIMER::[0m Executing kernel w/ Shared Genome + Constant Guides took [32m987.722168ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.432864ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 76874============================
+[34mInfo:: [0mgenome_test_length: 1900000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.040576ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m278.399017ms[0m
+[34mTIMER::[0m Executing kernel w/ Shared Genome + Constant Guides took [32m1042.588135ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.456288ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 79748============================
+[34mInfo:: [0mgenome_test_length: 2000000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.040384ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m292.278839ms[0m
+[34mTIMER::[0m Executing kernel w/ Shared Genome + Constant Guides took [32m1097.465820ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.506016ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 82888============================
+[34mInfo:: [0mgenome_test_length: 2100000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.029792ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m306.426636ms[0m
+[34mTIMER::[0m Executing kernel w/ Shared Genome + Constant Guides took [32m1152.326782ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.457824ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 85449============================
+[34mInfo:: [0mgenome_test_length: 2200000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.041216ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m463.636169ms[0m
+[34mTIMER::[0m Executing kernel w/ Shared Genome + Constant Guides took [32m1207.667480ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.431680ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 89760============================
+[34mInfo:: [0mgenome_test_length: 2300000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.053216ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m344.732422ms[0m
+[34mTIMER::[0m Executing kernel w/ Shared Genome + Constant Guides took [32m1262.078613ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.432096ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 92762============================
+[34mInfo:: [0mgenome_test_length: 2400000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.037312ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m350.253052ms[0m
+[34mTIMER::[0m Executing kernel w/ Shared Genome + Constant Guides took [32m1316.936279ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.471360ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 96591============================
+[34mInfo:: [0mgenome_test_length: 2500000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.031136ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m365.113892ms[0m
+[34mTIMER::[0m Executing kernel w/ Shared Genome + Constant Guides took [32m1371.814941ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.485728ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 100221============================
+[34mInfo:: [0mgenome_test_length: 2600000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.045216ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m380.678284ms[0m
+[34mTIMER::[0m Executing kernel w/ Shared Genome + Constant Guides took [32m1427.165894ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.534752ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 103429============================
+[34mInfo:: [0mgenome_test_length: 2700000000
+[34mTIMER::[0m Allocating GPU Memory took [32m5.096288ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m442.170532ms[0m
+[34mTIMER::[0m Executing kernel w/ Shared Genome + Constant Guides took [32m1481.551025ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.580096ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 107032============================
+[34mInfo:: [0mgenome_test_length: 2800000000
+[34mTIMER::[0m Allocating GPU Memory took [32m3.965824ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m431.085999ms[0m
+[34mTIMER::[0m Executing kernel w/ Shared Genome + Constant Guides took [32m1536.429932ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.495584ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 112175============================
+[34mInfo:: [0mgenome_test_length: 2900000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.033504ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m427.390167ms[0m
+[34mTIMER::[0m Executing kernel w/ Shared Genome + Constant Guides took [32m1591.298706ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.492864ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 117613============================
+[34mInfo:: [0mgenome_test_length: 3000000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.037280ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m479.073792ms[0m
+[34mTIMER::[0m Executing kernel w/ Shared Genome + Constant Guides took [32m1646.647827ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.470432ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 120565============================
+[32m✱ Running ./crispr-cuda 3[0m
+[34mInfo:: [0mGenome length: 3049315783 nucleotides (bytes)
+[34mInfo:: [0mNumber of guides: 46
+[34mTIMER::[0m Naive CPU took [32m1421.702881ms[0m
+[34mInfo:: [0mEstimated total time: 1.20423 hours (72.2537 minutes)
+[34mInfo:: [0mGround truth results size: 1089
+[34mInfo:: [0mgenome_test_length: 100000000
+[34mTIMER::[0m Allocating GPU Memory took [32m0.536256ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m19.318369ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Shared Genome & Guides + Register Cache took [32m56.969631ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m1.572032ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 5125============================
+[34mInfo:: [0mgenome_test_length: 200000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.766688ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m26.752800ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Shared Genome & Guides + Register Cache took [32m113.722717ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.438752ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 8746============================
+[34mInfo:: [0mgenome_test_length: 300000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.999744ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m42.672192ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Shared Genome & Guides + Register Cache took [32m170.492767ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.428416ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 12304============================
+[34mInfo:: [0mgenome_test_length: 400000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.995552ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m58.918240ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Shared Genome & Guides + Register Cache took [32m227.289185ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.415168ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 17035============================
+[34mInfo:: [0mgenome_test_length: 500000000
+[34mTIMER::[0m Allocating GPU Memory took [32m3.003808ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m74.781693ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Shared Genome & Guides + Register Cache took [32m284.054504ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.469152ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 21221============================
+[34mInfo:: [0mgenome_test_length: 600000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.995904ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m87.329567ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Shared Genome & Guides + Register Cache took [32m340.765350ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.419072ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 24567============================
+[34mInfo:: [0mgenome_test_length: 700000000
+[34mTIMER::[0m Allocating GPU Memory took [32m3.001024ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m102.439201ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Shared Genome & Guides + Register Cache took [32m397.510925ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.530208ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 28317============================
+[34mInfo:: [0mgenome_test_length: 800000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.986944ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m147.414139ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Shared Genome & Guides + Register Cache took [32m454.835419ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.428832ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 31669============================
+[34mInfo:: [0mgenome_test_length: 900000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.984224ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m133.175812ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Shared Genome & Guides + Register Cache took [32m511.120483ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.524224ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 36569============================
+[34mInfo:: [0mgenome_test_length: 1000000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.984032ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m148.670746ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Shared Genome & Guides + Register Cache took [32m567.822998ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.424192ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 42373============================
+[34mInfo:: [0mgenome_test_length: 1100000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.991808ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m163.711838ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Shared Genome & Guides + Register Cache took [32m624.614258ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.465056ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 47429============================
+[34mInfo:: [0mgenome_test_length: 1200000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.975584ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m178.970840ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Shared Genome & Guides + Register Cache took [32m681.424438ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.507456ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 52093============================
+[34mInfo:: [0mgenome_test_length: 1300000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.984224ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m247.043137ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Shared Genome & Guides + Register Cache took [32m738.158020ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.432160ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 56402============================
+[34mInfo:: [0mgenome_test_length: 1400000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.996352ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m210.224869ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Shared Genome & Guides + Register Cache took [32m794.919189ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.477472ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 59742============================
+[34mInfo:: [0mgenome_test_length: 1500000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.987104ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m225.955612ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Shared Genome & Guides + Register Cache took [32m851.642883ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.471232ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 64088============================
+[34mInfo:: [0mgenome_test_length: 1600000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.044192ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m240.378815ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Shared Genome & Guides + Register Cache took [32m908.894531ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.531328ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 69715============================
+[34mInfo:: [0mgenome_test_length: 1700000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.035936ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m358.797546ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Shared Genome & Guides + Register Cache took [32m965.255371ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.474528ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 73013============================
+[34mInfo:: [0mgenome_test_length: 1800000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.044480ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m273.989929ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Shared Genome & Guides + Register Cache took [32m1022.005188ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.468832ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 76874============================
+[34mInfo:: [0mgenome_test_length: 1900000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.051616ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m286.422302ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Shared Genome & Guides + Register Cache took [32m1078.736816ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.452864ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 79747============================
+[34mInfo:: [0mgenome_test_length: 2000000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.049856ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m301.316925ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Shared Genome & Guides + Register Cache took [32m1135.476562ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.534080ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 82888============================
+[34mInfo:: [0mgenome_test_length: 2100000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.027104ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m316.735321ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Shared Genome & Guides + Register Cache took [32m1192.111816ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.516160ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 85449============================
+[34mInfo:: [0mgenome_test_length: 2200000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.037888ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m433.627014ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Shared Genome & Guides + Register Cache took [32m1248.918701ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.450080ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 89760============================
+[34mInfo:: [0mgenome_test_length: 2300000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.049472ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m432.390533ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Shared Genome & Guides + Register Cache took [32m1305.807251ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.468192ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 92762============================
+[34mInfo:: [0mgenome_test_length: 2400000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.047840ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m363.030853ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Shared Genome & Guides + Register Cache took [32m1362.608765ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.459456ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 96591============================
+[34mInfo:: [0mgenome_test_length: 2500000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.041184ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m379.384613ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Shared Genome & Guides + Register Cache took [32m1419.242432ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.460896ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 100221============================
+[34mInfo:: [0mgenome_test_length: 2600000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.051648ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m394.546478ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Shared Genome & Guides + Register Cache took [32m1476.031372ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.465440ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 103429============================
+[34mInfo:: [0mgenome_test_length: 2700000000
+[34mTIMER::[0m Allocating GPU Memory took [32m5.115232ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m409.093689ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Shared Genome & Guides + Register Cache took [32m1532.733154ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.485184ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 107032============================
+[34mInfo:: [0mgenome_test_length: 2800000000
+[34mTIMER::[0m Allocating GPU Memory took [32m3.973408ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m427.254822ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Shared Genome & Guides + Register Cache took [32m1589.658569ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.636352ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 112175============================
+[34mInfo:: [0mgenome_test_length: 2900000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.027232ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m475.832275ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Shared Genome & Guides + Register Cache took [32m1646.879517ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.549280ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 117613============================
+[34mInfo:: [0mgenome_test_length: 3000000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.036800ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m457.536774ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Shared Genome & Guides + Register Cache took [32m1703.218018ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.505280ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 120565============================
+[32m✱ Running ./crispr-cuda 4[0m
+[34mInfo:: [0mGenome length: 3049315783 nucleotides (bytes)
+[34mInfo:: [0mNumber of guides: 46
+[34mTIMER::[0m Naive CPU took [32m1434.676514ms[0m
+[34mInfo:: [0mEstimated total time: 1.21522 hours (72.913 minutes)
+[34mInfo:: [0mGround truth results size: 1089
+[34mInfo:: [0mgenome_test_length: 100000000
+[34mTIMER::[0m Allocating GPU Memory took [32m0.495840ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m12.020544ms[0m
+[34mTIMER::[0m Executing kernel w/ Register cache took [32m68.735199ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m1.528224ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 5125============================
+[34mInfo:: [0mgenome_test_length: 200000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.775456ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m23.911808ms[0m
+[34mTIMER::[0m Executing kernel w/ Register cache took [32m137.374374ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.436704ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 8746============================
+[34mInfo:: [0mgenome_test_length: 300000000
+[34mTIMER::[0m Allocating GPU Memory took [32m3.003712ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m38.216511ms[0m
+[34mTIMER::[0m Executing kernel w/ Register cache took [32m205.994492ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.477504ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 12304============================
+[34mInfo:: [0mgenome_test_length: 400000000
+[34mTIMER::[0m Allocating GPU Memory took [32m3.010016ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m53.074177ms[0m
+[34mTIMER::[0m Executing kernel w/ Register cache took [32m274.635925ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.409536ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 17035============================
+[34mInfo:: [0mgenome_test_length: 500000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.991424ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m68.223267ms[0m
+[34mTIMER::[0m Executing kernel w/ Register cache took [32m343.288849ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.407200ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 21221============================
+[34mInfo:: [0mgenome_test_length: 600000000
+[34mTIMER::[0m Allocating GPU Memory took [32m3.000768ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m106.409470ms[0m
+[34mTIMER::[0m Executing kernel w/ Register cache took [32m412.388641ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.431200ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 24567============================
+[34mInfo:: [0mgenome_test_length: 700000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.995616ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m98.297409ms[0m
+[34mTIMER::[0m Executing kernel w/ Register cache took [32m480.569336ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.437952ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 28317============================
+[34mInfo:: [0mgenome_test_length: 800000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.990240ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m162.582947ms[0m
+[34mTIMER::[0m Executing kernel w/ Register cache took [32m549.211731ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.462048ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 31669============================
+[34mInfo:: [0mgenome_test_length: 900000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.971712ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m128.756348ms[0m
+[34mTIMER::[0m Executing kernel w/ Register cache took [32m617.842773ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.426912ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 36569============================
+[34mInfo:: [0mgenome_test_length: 1000000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.995680ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m143.363739ms[0m
+[34mTIMER::[0m Executing kernel w/ Register cache took [32m686.483643ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.424000ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 42373============================
+[34mInfo:: [0mgenome_test_length: 1100000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.983392ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m197.484390ms[0m
+[34mTIMER::[0m Executing kernel w/ Register cache took [32m755.144836ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.423968ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 47429============================
+[34mInfo:: [0mgenome_test_length: 1200000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.982496ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m171.904099ms[0m
+[34mTIMER::[0m Executing kernel w/ Register cache took [32m823.762573ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.462336ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 52093============================
+[34mInfo:: [0mgenome_test_length: 1300000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.997888ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m186.967331ms[0m
+[34mTIMER::[0m Executing kernel w/ Register cache took [32m892.416443ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.595904ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 56402============================
+[34mInfo:: [0mgenome_test_length: 1400000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.972544ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m210.490723ms[0m
+[34mTIMER::[0m Executing kernel w/ Register cache took [32m961.515015ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.461856ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 59742============================
+[34mInfo:: [0mgenome_test_length: 1500000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.983584ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m278.697113ms[0m
+[34mTIMER::[0m Executing kernel w/ Register cache took [32m1029.907593ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.457696ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 64088============================
+[34mInfo:: [0mgenome_test_length: 1600000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.028544ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m232.119492ms[0m
+[34mTIMER::[0m Executing kernel w/ Register cache took [32m1098.339600ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.471040ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 69715============================
+[34mInfo:: [0mgenome_test_length: 1700000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.038720ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m246.147995ms[0m
+[34mTIMER::[0m Executing kernel w/ Register cache took [32m1166.977661ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.445408ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 73013============================
+[34mInfo:: [0mgenome_test_length: 1800000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.024832ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m262.385651ms[0m
+[34mTIMER::[0m Executing kernel w/ Register cache took [32m1235.615356ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.451616ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 76874============================
+[34mInfo:: [0mgenome_test_length: 1900000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.045376ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m277.116028ms[0m
+[34mTIMER::[0m Executing kernel w/ Register cache took [32m1304.694824ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.485600ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 79748============================
+[34mInfo:: [0mgenome_test_length: 2000000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.035840ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m340.170776ms[0m
+[34mTIMER::[0m Executing kernel w/ Register cache took [32m1372.877930ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.451776ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 82888============================
+[34mInfo:: [0mgenome_test_length: 2100000000
+[34mTIMER::[0m Allocating GPU Memory took [32m3.967776ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m433.662415ms[0m
+[34mTIMER::[0m Executing kernel w/ Register cache took [32m1441.561401ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.425696ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 85449============================
+[34mInfo:: [0mgenome_test_length: 2200000000
+[34mTIMER::[0m Allocating GPU Memory took [32m5.073312ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m363.547607ms[0m
+[34mTIMER::[0m Executing kernel w/ Register cache took [32m1510.157349ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.446880ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 89760============================
+[34mInfo:: [0mgenome_test_length: 2300000000
+[34mTIMER::[0m Allocating GPU Memory took [32m5.412032ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m332.025726ms[0m
+[34mTIMER::[0m Executing kernel w/ Register cache took [32m1579.273560ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.454240ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 92762============================
+[34mInfo:: [0mgenome_test_length: 2400000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.037440ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m350.247406ms[0m
+[34mTIMER::[0m Executing kernel w/ Register cache took [32m1647.452393ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.433792ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 96591============================
+[34mInfo:: [0mgenome_test_length: 2500000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.044352ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m364.533478ms[0m
+[34mTIMER::[0m Executing kernel w/ Register cache took [32m1716.083740ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.465984ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 100221============================
+[34mInfo:: [0mgenome_test_length: 2600000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.045344ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m379.690735ms[0m
+[34mTIMER::[0m Executing kernel w/ Register cache took [32m1784.737183ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.460736ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 103429============================
+[34mInfo:: [0mgenome_test_length: 2700000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.035424ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m394.363556ms[0m
+[34mTIMER::[0m Executing kernel w/ Register cache took [32m1853.370972ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.445088ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 107032============================
+[34mInfo:: [0mgenome_test_length: 2800000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.049472ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m411.627594ms[0m
+[34mTIMER::[0m Executing kernel w/ Register cache took [32m1921.992310ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.520128ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 112175============================
+[34mInfo:: [0mgenome_test_length: 2900000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.043648ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m426.596436ms[0m
+[34mTIMER::[0m Executing kernel w/ Register cache took [32m1990.610474ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.592992ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 117613============================
+[34mInfo:: [0mgenome_test_length: 3000000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.037568ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m476.270569ms[0m
+[34mTIMER::[0m Executing kernel w/ Register cache took [32m2059.754395ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.512032ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 120565============================
+[32m✱ Running ./crispr-cuda 5[0m
+[34mInfo:: [0mGenome length: 3049315783 nucleotides (bytes)
+[34mInfo:: [0mNumber of guides: 46
+[34mTIMER::[0m Naive CPU took [32m1446.563599ms[0m
+[34mInfo:: [0mEstimated total time: 1.22529 hours (73.5172 minutes)
+[34mInfo:: [0mGround truth results size: 1089
+[34mInfo:: [0mgenome_test_length: 100000000
+[34mTIMER::[0m Allocating GPU Memory took [32m0.541792ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m12.475968ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache took [32m67.989250ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m1.574752ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 5125============================
+[34mInfo:: [0mgenome_test_length: 200000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.771840ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m25.051168ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache took [32m135.702362ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.427168ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 8746============================
+[34mInfo:: [0mgenome_test_length: 300000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.993408ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m39.836098ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache took [32m203.427582ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.532416ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 12304============================
+[34mInfo:: [0mgenome_test_length: 400000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.990912ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m80.718307ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache took [32m271.161133ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.429312ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 17035============================
+[34mInfo:: [0mgenome_test_length: 500000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.996960ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m70.042397ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache took [32m338.890442ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.499328ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 21221============================
+[34mInfo:: [0mgenome_test_length: 600000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.991808ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m123.028931ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache took [32m406.811951ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.434624ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 24567============================
+[34mInfo:: [0mgenome_test_length: 700000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.993408ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m99.769218ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache took [32m474.969330ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.451360ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 28317============================
+[34mInfo:: [0mgenome_test_length: 800000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.997760ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m114.439522ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache took [32m542.285095ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.486144ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 31669============================
+[34mInfo:: [0mgenome_test_length: 900000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.976256ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m182.255585ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache took [32m610.042969ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.448384ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 36569============================
+[34mInfo:: [0mgenome_test_length: 1000000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.972832ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m144.066147ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache took [32m677.746887ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.468096ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 42373============================
+[34mInfo:: [0mgenome_test_length: 1100000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.991776ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m158.822266ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache took [32m745.488281ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.476576ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 47429============================
+[34mInfo:: [0mgenome_test_length: 1200000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.996448ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m173.500351ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache took [32m813.414429ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.545600ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 52093============================
+[34mInfo:: [0mgenome_test_length: 1300000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.963872ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m234.102310ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache took [32m881.131042ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.426944ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 56402============================
+[34mInfo:: [0mgenome_test_length: 1400000000
+[34mTIMER::[0m Allocating GPU Memory took [32m3.002272ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m255.487289ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache took [32m948.864685ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.464448ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 59742============================
+[34mInfo:: [0mgenome_test_length: 1500000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.985984ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m218.946823ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache took [32m1017.009338ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.501504ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 64088============================
+[34mInfo:: [0mgenome_test_length: 1600000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.034368ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m232.868866ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache took [32m1084.315918ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.467872ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 69715============================
+[34mInfo:: [0mgenome_test_length: 1700000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.042368ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m247.874588ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache took [32m1152.235352ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.472128ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 73013============================
+[34mInfo:: [0mgenome_test_length: 1800000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.022912ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m263.086700ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache took [32m1219.975098ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.460992ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 76874============================
+[34mInfo:: [0mgenome_test_length: 1900000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.037760ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m277.327362ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache took [32m1287.695312ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.552704ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 79748============================
+[34mInfo:: [0mgenome_test_length: 2000000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.028608ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m294.294617ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache took [32m1355.864136ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.535936ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 82888============================
+[34mInfo:: [0mgenome_test_length: 2100000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.006944ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m383.389130ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache took [32m1423.180176ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.502784ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 85449============================
+[34mInfo:: [0mgenome_test_length: 2200000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.045280ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m453.940796ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache took [32m1491.074707ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.446272ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 89760============================
+[34mInfo:: [0mgenome_test_length: 2300000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.041600ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m446.231323ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache took [32m1558.824707ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.454176ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 92762============================
+[34mInfo:: [0mgenome_test_length: 2400000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.045280ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m409.569885ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache took [32m1626.600464ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.510016ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 96591============================
+[34mInfo:: [0mgenome_test_length: 2500000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.045472ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m373.103363ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache took [32m1694.318848ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.513312ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 100221============================
+[34mInfo:: [0mgenome_test_length: 2600000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.043552ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m382.738617ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache took [32m1762.053711ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.489632ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 103429============================
+[34mInfo:: [0mgenome_test_length: 2700000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.020416ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m397.930908ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache took [32m1830.187622ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.490688ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 107032============================
+[34mInfo:: [0mgenome_test_length: 2800000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.049792ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m413.343201ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache took [32m1897.671997ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.464064ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 112175============================
+[34mInfo:: [0mgenome_test_length: 2900000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.052224ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m429.589203ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache took [32m1965.412964ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.480288ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 117613============================
+[34mInfo:: [0mgenome_test_length: 3000000000
+[34mTIMER::[0m Allocating GPU Memory took [32m5.090400ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m443.089386ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache took [32m2033.569580ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.593376ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 120565============================
+[32m✱ Running ./crispr-cuda 6[0m
+[34mInfo:: [0mGenome length: 3049315783 nucleotides (bytes)
+[34mInfo:: [0mNumber of guides: 46
+[34mTIMER::[0m Naive CPU took [32m1421.365356ms[0m
+[34mInfo:: [0mEstimated total time: 1.20394 hours (72.2365 minutes)
+[34mInfo:: [0mGround truth results size: 1089
+[34mInfo:: [0mgenome_test_length: 100000000
+[34mTIMER::[0m Allocating GPU Memory took [32m0.560192ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m18.399200ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache + Shared Guides took [32m52.141953ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m1.567488ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 5125============================
+[34mInfo:: [0mgenome_test_length: 200000000
+[34mTIMER::[0m Allocating GPU Memory took [32m3.328224ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m25.259935ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache + Shared Guides took [32m104.090721ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.433632ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 8746============================
+[34mInfo:: [0mgenome_test_length: 300000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.997728ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m40.147041ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache + Shared Guides took [32m156.033371ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.538688ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 12304============================
+[34mInfo:: [0mgenome_test_length: 400000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.994560ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m73.290588ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache + Shared Guides took [32m208.143265ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.436992ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 17035============================
+[34mInfo:: [0mgenome_test_length: 500000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.980800ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m69.953247ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache + Shared Guides took [32m260.077850ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.431872ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 21221============================
+[34mInfo:: [0mgenome_test_length: 600000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.993760ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m84.678497ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache + Shared Guides took [32m312.028503ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.436320ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 24567============================
+[34mInfo:: [0mgenome_test_length: 700000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.987712ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m139.869095ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache + Shared Guides took [32m363.995667ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.427968ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 28317============================
+[34mInfo:: [0mgenome_test_length: 800000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.997888ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m114.839134ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache + Shared Guides took [32m415.973114ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.432672ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 31669============================
+[34mInfo:: [0mgenome_test_length: 900000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.993760ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m129.738022ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache + Shared Guides took [32m468.435516ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.457888ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 36569============================
+[34mInfo:: [0mgenome_test_length: 1000000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.992608ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m145.077118ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache + Shared Guides took [32m519.992432ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.549408ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 42373============================
+[34mInfo:: [0mgenome_test_length: 1100000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.945472ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m160.844742ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache + Shared Guides took [32m571.936401ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.513952ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 47429============================
+[34mInfo:: [0mgenome_test_length: 1200000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.024928ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m224.807556ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache + Shared Guides took [32m623.898254ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.427936ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 52093============================
+[34mInfo:: [0mgenome_test_length: 1300000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.993056ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m252.298721ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache + Shared Guides took [32m675.856750ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.457024ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 56402============================
+[34mInfo:: [0mgenome_test_length: 1400000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.994112ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m234.384033ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache + Shared Guides took [32m727.837219ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.438240ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 59742============================
+[34mInfo:: [0mgenome_test_length: 1500000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.978912ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m219.769882ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache + Shared Guides took [32m779.803833ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.441376ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 64088============================
+[34mInfo:: [0mgenome_test_length: 1600000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.045440ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m233.726181ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache + Shared Guides took [32m831.822510ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.476864ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 69715============================
+[34mInfo:: [0mgenome_test_length: 1700000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.050048ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m248.950073ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache + Shared Guides took [32m884.217529ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.452416ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 73013============================
+[34mInfo:: [0mgenome_test_length: 1800000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.053632ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m264.622955ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache + Shared Guides took [32m935.750488ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.461888ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 76874============================
+[34mInfo:: [0mgenome_test_length: 1900000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.049472ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m279.741180ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache + Shared Guides took [32m987.768860ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.479424ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 79748============================
+[34mInfo:: [0mgenome_test_length: 2000000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.041952ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m295.502380ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache + Shared Guides took [32m1039.759644ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.471520ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 82888============================
+[34mInfo:: [0mgenome_test_length: 2100000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.042528ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m309.657654ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache + Shared Guides took [32m1091.726074ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.522624ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 85449============================
+[34mInfo:: [0mgenome_test_length: 2200000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.036192ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m330.396088ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache + Shared Guides took [32m1143.686768ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.564096ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 89760============================
+[34mInfo:: [0mgenome_test_length: 2300000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.037184ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m383.460297ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache + Shared Guides took [32m1195.652588ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.561952ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 92762============================
+[34mInfo:: [0mgenome_test_length: 2400000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.036288ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m430.517395ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache + Shared Guides took [32m1247.627808ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.468032ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 96591============================
+[34mInfo:: [0mgenome_test_length: 2500000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.051776ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m473.739319ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache + Shared Guides took [32m1299.576416ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.489760ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 100221============================
+[34mInfo:: [0mgenome_test_length: 2600000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.021888ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m510.683411ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache + Shared Guides took [32m1351.592651ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.471680ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 103429============================
+[34mInfo:: [0mgenome_test_length: 2700000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.015776ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m542.397278ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache + Shared Guides took [32m1403.531372ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.524736ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 107032============================
+[34mInfo:: [0mgenome_test_length: 2800000000
+[34mTIMER::[0m Allocating GPU Memory took [32m5.102720ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m568.540649ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache + Shared Guides took [32m1455.517578ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.468224ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 112175============================
+[34mInfo:: [0mgenome_test_length: 2900000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.001184ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m584.433960ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache + Shared Guides took [32m1507.518921ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.451872ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 117613============================
+[34mInfo:: [0mgenome_test_length: 3000000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.058496ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m595.672302ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache + Shared Guides took [32m1559.933838ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.470048ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 120565============================
+[32m✱ Running ./crispr-cuda 7[0m
+[34mInfo:: [0mGenome length: 3049315783 nucleotides (bytes)
+[34mInfo:: [0mNumber of guides: 46
+[34mTIMER::[0m Naive CPU took [32m1475.123047ms[0m
+[34mInfo:: [0mEstimated total time: 1.24948 hours (74.9686 minutes)
+[34mInfo:: [0mGround truth results size: 1089
+[34mInfo:: [0mgenome_test_length: 100000000
+[34mTIMER::[0m Allocating GPU Memory took [32m0.519200ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m12.567008ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache + Shared Guides + Warp Queue took [32m54.334240ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m1.520576ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 5125============================
+[34mInfo:: [0mgenome_test_length: 200000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.772928ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m24.651968ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache + Shared Guides + Warp Queue took [32m108.447777ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.413024ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 8746============================
+[34mInfo:: [0mgenome_test_length: 300000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.990368ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m48.019550ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache + Shared Guides + Warp Queue took [32m162.603943ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.503552ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 12304============================
+[34mInfo:: [0mgenome_test_length: 400000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.992064ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m55.914368ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache + Shared Guides + Warp Queue took [32m216.744583ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.433888ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 17035============================
+[34mInfo:: [0mgenome_test_length: 500000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.996960ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m68.937981ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache + Shared Guides + Warp Queue took [32m270.934601ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.420384ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 21221============================
+[34mInfo:: [0mgenome_test_length: 600000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.998528ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m83.731453ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache + Shared Guides + Warp Queue took [32m325.124146ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.407040ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 24567============================
+[34mInfo:: [0mgenome_test_length: 700000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.995840ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m98.609634ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache + Shared Guides + Warp Queue took [32m379.290771ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.422176ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 28317============================
+[34mInfo:: [0mgenome_test_length: 800000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.993856ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m113.416862ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache + Shared Guides + Warp Queue took [32m433.411285ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.413312ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 31669============================
+[34mInfo:: [0mgenome_test_length: 900000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.997504ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m128.471481ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache + Shared Guides + Warp Queue took [32m487.620819ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.426880ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 36569============================
+[34mInfo:: [0mgenome_test_length: 1000000000
+[34mTIMER::[0m Allocating GPU Memory took [32m3.000832ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m142.662201ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache + Shared Guides + Warp Queue took [32m542.199951ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.404256ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 42373============================
+[34mInfo:: [0mgenome_test_length: 1100000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.999904ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m158.283813ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache + Shared Guides + Warp Queue took [32m595.983521ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.416960ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 47429============================
+[34mInfo:: [0mgenome_test_length: 1200000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.998336ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m172.967911ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache + Shared Guides + Warp Queue took [32m650.143799ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.425408ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 52093============================
+[34mInfo:: [0mgenome_test_length: 1300000000
+[34mTIMER::[0m Allocating GPU Memory took [32m3.000832ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m188.201187ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache + Shared Guides + Warp Queue took [32m704.348633ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.423296ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 56402============================
+[34mInfo:: [0mgenome_test_length: 1400000000
+[34mTIMER::[0m Allocating GPU Memory took [32m5.105024ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m199.842331ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache + Shared Guides + Warp Queue took [32m758.471497ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.440416ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 59742============================
+[34mInfo:: [0mgenome_test_length: 1500000000
+[34mTIMER::[0m Allocating GPU Memory took [32m3.000352ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m217.876923ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache + Shared Guides + Warp Queue took [32m812.732239ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.449056ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 64088============================
+[34mInfo:: [0mgenome_test_length: 1600000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.042880ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m231.974075ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache + Shared Guides + Warp Queue took [32m866.892822ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.423424ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 69715============================
+[34mInfo:: [0mgenome_test_length: 1700000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.049824ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m247.338715ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache + Shared Guides + Warp Queue took [32m921.446350ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.425216ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 73013============================
+[34mInfo:: [0mgenome_test_length: 1800000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.047872ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m260.298157ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache + Shared Guides + Warp Queue took [32m975.208069ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.419872ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 76874============================
+[34mInfo:: [0mgenome_test_length: 1900000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.056640ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m276.576935ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache + Shared Guides + Warp Queue took [32m1029.427856ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.424256ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 79748============================
+[34mInfo:: [0mgenome_test_length: 2000000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.051552ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m290.541931ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache + Shared Guides + Warp Queue took [32m1083.565918ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.441280ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 82888============================
+[34mInfo:: [0mgenome_test_length: 2100000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.021760ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m305.851318ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache + Shared Guides + Warp Queue took [32m1137.804443ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.426080ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 85449============================
+[34mInfo:: [0mgenome_test_length: 2200000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.053120ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m322.228699ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache + Shared Guides + Warp Queue took [32m1191.999390ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.484768ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 89760============================
+[34mInfo:: [0mgenome_test_length: 2300000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.052480ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m335.943329ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache + Shared Guides + Warp Queue took [32m1246.158936ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.479360ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 92762============================
+[34mInfo:: [0mgenome_test_length: 2400000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.048416ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m351.782471ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache + Shared Guides + Warp Queue took [32m1300.356445ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.473056ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 96591============================
+[34mInfo:: [0mgenome_test_length: 2500000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.033280ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m385.976379ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache + Shared Guides + Warp Queue took [32m1354.577515ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.477856ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 100221============================
+[34mInfo:: [0mgenome_test_length: 2600000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.041408ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m417.291595ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache + Shared Guides + Warp Queue took [32m1408.759888ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.470240ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 103429============================
+[34mInfo:: [0mgenome_test_length: 2700000000
+[34mTIMER::[0m Allocating GPU Memory took [32m5.101408ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m444.086060ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache + Shared Guides + Warp Queue took [32m1463.260742ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.497600ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 107032============================
+[34mInfo:: [0mgenome_test_length: 2800000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.054272ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m474.174835ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache + Shared Guides + Warp Queue took [32m1516.972290ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.475904ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 112175============================
+[34mInfo:: [0mgenome_test_length: 2900000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.052128ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m502.354187ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache + Shared Guides + Warp Queue took [32m1571.268311ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.473952ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 117613============================
+[34mInfo:: [0mgenome_test_length: 3000000000
+[34mTIMER::[0m Allocating GPU Memory took [32m6.099040ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m528.852600ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache + Shared Guides + Warp Queue took [32m1625.783081ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.489408ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 120565============================
+[32m✱ Running ./crispr-cuda 8[0m
+[34mInfo:: [0mGenome length: 3049315783 nucleotides (bytes)
+[34mInfo:: [0mNumber of guides: 46
+[34mTIMER::[0m Naive CPU took [32m1430.381226ms[0m
+[34mInfo:: [0mEstimated total time: 1.21158 hours (72.6947 minutes)
+[34mInfo:: [0mGround truth results size: 1089
+[34mInfo:: [0mgenome_test_length: 100000000
+[34mTIMER::[0m Allocating GPU Memory took [32m0.577664ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m14.006400ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache with shuffle + Shared Guides took [32m59.094913ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m1.626112ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 5125============================
+[34mInfo:: [0mgenome_test_length: 200000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.752928ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m28.671488ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache with shuffle + Shared Guides took [32m118.109123ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.474848ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 8746============================
+[34mInfo:: [0mgenome_test_length: 300000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.972320ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m43.869919ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache with shuffle + Shared Guides took [32m177.109787ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.434272ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 12304============================
+[34mInfo:: [0mgenome_test_length: 400000000
+[34mTIMER::[0m Allocating GPU Memory took [32m8.149984ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m65.687965ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache with shuffle + Shared Guides took [32m236.126785ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.439424ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 17035============================
+[34mInfo:: [0mgenome_test_length: 500000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.981696ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m72.052193ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache with shuffle + Shared Guides took [32m295.146301ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.415552ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 21221============================
+[34mInfo:: [0mgenome_test_length: 600000000
+[34mTIMER::[0m Allocating GPU Memory took [32m3.000160ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m87.336700ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache with shuffle + Shared Guides took [32m354.150726ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.415392ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 24567============================
+[34mInfo:: [0mgenome_test_length: 700000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.994784ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m102.568893ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache with shuffle + Shared Guides took [32m413.162903ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.424224ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 28317============================
+[34mInfo:: [0mgenome_test_length: 800000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.995328ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m130.012802ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache with shuffle + Shared Guides took [32m472.192291ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.418016ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 31669============================
+[34mInfo:: [0mgenome_test_length: 900000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.990176ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m164.626114ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache with shuffle + Shared Guides took [32m531.201355ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.427776ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 36569============================
+[34mInfo:: [0mgenome_test_length: 1000000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.970240ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m149.033539ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache with shuffle + Shared Guides took [32m590.617493ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.418016ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 42373============================
+[34mInfo:: [0mgenome_test_length: 1100000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.994816ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m210.554855ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache with shuffle + Shared Guides took [32m649.228455ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.429440ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 47429============================
+[34mInfo:: [0mgenome_test_length: 1200000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.990848ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m179.642624ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache with shuffle + Shared Guides took [32m708.253296ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.417792ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 52093============================
+[34mInfo:: [0mgenome_test_length: 1300000000
+[34mTIMER::[0m Allocating GPU Memory took [32m2.999520ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m194.938232ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache with shuffle + Shared Guides took [32m767.270142ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.417376ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 56402============================
+[34mInfo:: [0mgenome_test_length: 1400000000
+[34mTIMER::[0m Allocating GPU Memory took [32m3.004704ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m209.979782ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache with shuffle + Shared Guides took [32m826.286865ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.426432ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 59742============================
+[34mInfo:: [0mgenome_test_length: 1500000000
+[34mTIMER::[0m Allocating GPU Memory took [32m3.001632ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m243.009247ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache with shuffle + Shared Guides took [32m885.279724ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.414144ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 64088============================
+[34mInfo:: [0mgenome_test_length: 1600000000
+[34mTIMER::[0m Allocating GPU Memory took [32m5.076992ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m317.542786ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache with shuffle + Shared Guides took [32m944.336914ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.559840ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 69715============================
+[34mInfo:: [0mgenome_test_length: 1700000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.042272ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m305.614075ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache with shuffle + Shared Guides took [32m1003.729065ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.579872ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 73013============================
+[34mInfo:: [0mgenome_test_length: 1800000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.044960ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m280.284454ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache with shuffle + Shared Guides took [32m1062.346924ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.554816ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 76874============================
+[34mInfo:: [0mgenome_test_length: 1900000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.047744ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m286.419983ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache with shuffle + Shared Guides took [32m1121.352173ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.434144ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 79748============================
+[34mInfo:: [0mgenome_test_length: 2000000000
+[34mTIMER::[0m Allocating GPU Memory took [32m5.102752ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m300.776703ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache with shuffle + Shared Guides took [32m1180.384766ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.422080ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 82888============================
+[34mInfo:: [0mgenome_test_length: 2100000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.051680ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m317.109161ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache with shuffle + Shared Guides took [32m1239.412231ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.456416ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 85449============================
+[34mInfo:: [0mgenome_test_length: 2200000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.052128ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m332.736664ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache with shuffle + Shared Guides took [32m1298.814941ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.426496ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 89760============================
+[34mInfo:: [0mgenome_test_length: 2300000000
+[34mTIMER::[0m Allocating GPU Memory took [32m5.071680ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m347.445679ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache with shuffle + Shared Guides took [32m1357.438965ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.432096ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 92762============================
+[34mInfo:: [0mgenome_test_length: 2400000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.056896ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m363.947479ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache with shuffle + Shared Guides took [32m1416.457397ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.437216ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 96591============================
+[34mInfo:: [0mgenome_test_length: 2500000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.055744ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m378.819855ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache with shuffle + Shared Guides took [32m1475.469482ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.412352ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 100221============================
+[34mInfo:: [0mgenome_test_length: 2600000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.057280ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m394.645447ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache with shuffle + Shared Guides took [32m1534.877075ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.417280ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 103429============================
+[34mInfo:: [0mgenome_test_length: 2700000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.042848ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m409.615021ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache with shuffle + Shared Guides took [32m1593.480469ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.435200ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 107032============================
+[34mInfo:: [0mgenome_test_length: 2800000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.018624ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m425.638031ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache with shuffle + Shared Guides took [32m1652.494629ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.420288ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 112175============================
+[34mInfo:: [0mgenome_test_length: 2900000000
+[34mTIMER::[0m Allocating GPU Memory took [32m4.059872ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m441.369934ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache with shuffle + Shared Guides took [32m1711.926636ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.470560ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 117613============================
+[34mInfo:: [0mgenome_test_length: 3000000000
+[34mTIMER::[0m Allocating GPU Memory took [32m5.086368ms[0m
+[34mTIMER::[0m Copying output from host to device took [32m456.479492ms[0m
+[34mTIMER::[0m Executing kernel w/ Coarsened Register Cache with shuffle + Shared Guides took [32m1770.799438ms[0m
+[34mTIMER::[0m Copying memory from device to host took [32m0.453216ms[0m
+[34mInfo:: [0mResults were not equal, sad D:
+[34mInfo:: [0m============================hostNumResults: 120565============================
+[32m✱ The build folder has been uploaded to http://s3.amazonaws.com/files.rai-project.com/userdata/build-5cd21e29ee4c0715c18b6462.tar.gz. The data will be present for only a short duration of time.[0m
+[32m✱ Server has ended your request.[0m
